@@ -240,10 +240,10 @@ export default function App() {
               {/* Grid of access icons with name (No description, strictly requested) */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 w-full max-w-5xl">
                 {[
-                  { id: 'admin', name: 'Administrador / Dueño', icon: Shield },
+                  { id: 'admin', name: 'Gerente: Alejandro Castellanos', icon: Shield },
                   { id: 'advisor', name: 'Asesor / Recepción', icon: User },
-                  { id: 'mechanic', name: 'Mecánico / Técnico', icon: Wrench },
-                  { id: 'warehouse', name: 'Almacén e Inventarios', icon: Package },
+                  { id: 'mechanic', name: 'Técnico de Mantenimiento (7 Operarios)', icon: Wrench },
+                  { id: 'warehouse', name: 'Almacenista / Auxiliar de Control', icon: Package },
                   { id: 'client', name: 'Portal del Cliente', icon: Car }
                 ].map((roleItem) => {
                   const IconComponent = roleItem.icon;
@@ -300,17 +300,17 @@ export default function App() {
                 <h5 className="font-bold flex items-center gap-1">
                   <span>Vista de Rol: </span>
                   <strong className="underline decoration-2">
-                    {currentRole === 'admin' && 'Administrador General / Dueño del Taller'}
+                    {currentRole === 'admin' && 'Gerente de Mantenimiento (Alejandro Castellanos)'}
                     {currentRole === 'advisor' && 'Asesor de Servicio / Recepcionista'}
-                    {currentRole === 'mechanic' && 'Mecánico / Técnico Operativo'}
-                    {currentRole === 'warehouse' && 'Administrador de Almacén e Inventarios'}
+                    {currentRole === 'mechanic' && 'Técnico de Mantenimiento (7 Operarios)'}
+                    {currentRole === 'warehouse' && 'Almacenista / Auxiliar de Control (Soporte)'}
                     {currentRole === 'client' && 'Portal / Monitor del Cliente'}
                   </strong>
                 </h5>
                 <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                  {currentRole === 'admin' && 'Estás viendo el control global. Aquí supervisas facturación, utilidades, gráficos de horas mecánicas, administras empleados con esquemas de comisiones y editas plantillas de cotizaciones.'}
+                  {currentRole === 'admin' && 'Mando central ejecutivo. Gestiona indicadores OEE, MTBF/MTTR, gráficos Pareto de fallas, aprobación de órdenes correctivas y costos totales del taller.'}
                   {currentRole === 'advisor' && 'Estás simulando la recepción del auto. Puedes registrar clientes/autos, realizar el checklist visual de entrada, cotizar mano de obra y refacciones, registrar abonos y agendar citas en bahías.'}
-                  {currentRole === 'mechanic' && 'Estás simulando la tablet de taller de un técnico mecánico. Desde aquí fichas entrada/pausas de tiempo en órdenes, escribes reportes de diagnóstico técnico con fotos y requieres refacciones al almacén.'}
+                  {currentRole === 'mechanic' && 'Terminal del Técnico en bahía. Gestiona bandeja de tareas personalizada por prioridad, cronómetro de trabajo con play/pausa, checklist de procedimientos, evidencias fotográficas digitales e historial clínico del vehículo.'}
                   {currentRole === 'warehouse' && 'Estás controlando el almacén. Aquí despachas las refacciones requeridas por mecánicos en tiempo real, registras proveedores, emites órdenes de compra y controlas stocks mínimos.'}
                   {currentRole === 'client' && 'Estás simulando la perspectiva del cliente. Puedes dar seguimiento en tiempo real (tracking) de las fases de tu auto, autorizar/declinar presupuestos digitales y consultar alertas de verificación CDMX.'}
                 </p>

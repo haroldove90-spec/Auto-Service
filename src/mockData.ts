@@ -133,6 +133,46 @@ export const INITIAL_EMPLOYEES: Employee[] = [
     phone: '55-5555-6666'
   },
   {
+    id: 'emp-5',
+    name: 'Carlos "El Chispa" Gómez',
+    role: 'Mecanico',
+    commissionRate: 15,
+    active: true,
+    phone: '55-2222-3333'
+  },
+  {
+    id: 'emp-6',
+    name: 'Luis "El Afinaciones" Rodríguez',
+    role: 'Mecanico',
+    commissionRate: 15,
+    active: true,
+    phone: '55-4444-5555'
+  },
+  {
+    id: 'emp-7',
+    name: 'Mario "El Pistón" Sánchez',
+    role: 'Mecanico',
+    commissionRate: 15,
+    active: true,
+    phone: '55-6666-7777'
+  },
+  {
+    id: 'emp-8',
+    name: 'Jorge "El Muelles" López',
+    role: 'Mecanico',
+    commissionRate: 15,
+    active: true,
+    phone: '55-8888-9999'
+  },
+  {
+    id: 'emp-9',
+    name: 'Roberto "El Escáner" Díaz',
+    role: 'Mecanico',
+    commissionRate: 16,
+    active: true,
+    phone: '55-9999-0000'
+  },
+  {
     id: 'emp-4',
     name: 'Ana María Torres',
     role: 'Cajero',
