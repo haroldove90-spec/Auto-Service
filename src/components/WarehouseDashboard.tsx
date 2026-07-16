@@ -18,6 +18,8 @@ interface WarehouseDashboardProps {
   receivePurchaseOrder: (poId: string) => void;
   handleRequisitionStatus: (reqId: string, status: 'Despachado' | 'Rechazado') => void;
   addSupplier: (s: Omit<Supplier, 'id'>) => void;
+  activeTab?: 'catalog' | 'requisitions' | 'purchases';
+  setActiveTab?: (tab: 'catalog' | 'requisitions' | 'purchases') => void;
 }
 
 export default function WarehouseDashboard({
@@ -32,9 +34,13 @@ export default function WarehouseDashboard({
   addPurchaseOrder,
   receivePurchaseOrder,
   handleRequisitionStatus,
-  addSupplier
+  addSupplier,
+  activeTab: propActiveTab,
+  setActiveTab: propSetActiveTab
 }: WarehouseDashboardProps) {
-  const [activeTab, setActiveTab] = useState<'catalog' | 'requisitions' | 'purchases'>('catalog');
+  const [localTab, setLocalTab] = useState<'catalog' | 'requisitions' | 'purchases'>('catalog');
+  const activeTab = propActiveTab || localTab;
+  const setActiveTab = propSetActiveTab || setLocalTab;
 
   // Search filter states
   const [inventorySearch, setInventorySearch] = useState('');

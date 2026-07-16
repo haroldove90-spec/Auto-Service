@@ -17,6 +17,8 @@ interface MechanicDashboardProps {
   updateOrderDiagnostics: (orderId: string, diagnostics: string, photos: string[]) => void;
   submitPartRequisition: (orderId: string, itemId: string, qty: number, mechanicId: string) => void;
   updateOrderStatus: (orderId: string, status: any) => void;
+  activeTab?: 'tasks' | 'diagnostics' | 'requisitions';
+  setActiveTab?: (tab: 'tasks' | 'diagnostics' | 'requisitions') => void;
 }
 
 export default function MechanicDashboard({
@@ -30,8 +32,13 @@ export default function MechanicDashboard({
   clockOutOrder,
   updateOrderDiagnostics,
   submitPartRequisition,
-  updateOrderStatus
+  updateOrderStatus,
+  activeTab: propActiveTab,
+  setActiveTab: propSetActiveTab
 }: MechanicDashboardProps) {
+  const [localTab, setLocalTab] = useState<'tasks' | 'diagnostics' | 'requisitions'>('tasks');
+  const activeTab = propActiveTab || localTab;
+  const setActiveTab = propSetActiveTab || setLocalTab;
   // Select which mechanic profile we are simulating (simplifies testing)
   const mechanics = employees.filter(e => e.role === 'Mecanico' && e.active);
   const [selectedMechanicId, setSelectedMechanicId] = useState(mechanics[0]?.id || 'emp-2');
@@ -116,7 +123,7 @@ export default function MechanicDashboard({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* ASSIGNED ORDERS SIDEBAR */}
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div className={`bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4 ${activeTab === 'tasks' ? 'block' : 'hidden lg:block'}`}>
           <div className="flex justify-between items-center border-b border-slate-100 pb-2">
             <h5 className="font-bold text-slate-800">Mi Fila de Tareas</h5>
             <span className="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full text-[10px]">
@@ -134,7 +141,10 @@ export default function MechanicDashboard({
                 return (
                   <button
                     key={o.id}
-                    onClick={() => setSelectedOrderId(o.id)}
+                    onClick={() => {
+                      setSelectedOrderId(o.id);
+                      setActiveTab('diagnostics');
+                    }}
                     className={`w-full text-left p-3.5 border rounded-xl text-xs transition-all flex justify-between items-start ${
                       selectedOrderId === o.id 
                         ? 'border-amber-500 bg-amber-50/50 shadow-sm font-semibold' 
@@ -177,9 +187,9 @@ export default function MechanicDashboard({
 
         {/* WORKSPACE AREA */}
         {activeOrder ? (
-          <div className="lg:col-span-2 space-y-6">
+          <div className={`lg:col-span-2 space-y-6 ${activeTab !== 'tasks' ? 'block' : 'hidden lg:block'}`}>
             {/* 1. Time management clock card */}
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <div className={`bg-white p-6 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 items-center ${activeTab !== 'tasks' ? 'grid' : 'hidden lg:grid'}`}>
               <div>
                 <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Cronómetro de Tarea</span>
                 <div className="flex items-center gap-2 mt-1">
@@ -235,7 +245,7 @@ export default function MechanicDashboard({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 2. Diagnostics & multimedia submission */}
-              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+              <div className={`bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4 ${activeTab === 'diagnostics' ? 'block' : 'hidden lg:block'}`}>
                 <h5 className="font-bold text-slate-800 border-b border-slate-100 pb-2 flex items-center gap-1.5">
                   <FileText size={16} className="text-amber-600" />
                   Diagnóstico y Evidencia
@@ -292,7 +302,7 @@ export default function MechanicDashboard({
               </div>
 
               {/* 3. Requisition of replacement parts */}
-              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+              <div className={`bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 ${activeTab === 'requisitions' ? 'flex' : 'hidden lg:flex'}`}>
                 <div>
                   <h5 className="font-bold text-slate-800 border-b border-slate-100 pb-2 flex items-center gap-1.5 mb-3">
                     <Package size={16} className="text-amber-600" />
@@ -346,7 +356,7 @@ export default function MechanicDashboard({
             </div>
           </div>
         ) : (
-          <div className="lg:col-span-2 bg-slate-50 rounded-xl border border-dashed border-slate-300 p-12 text-center flex flex-col justify-center items-center">
+          <div className={`lg:col-span-2 bg-slate-50 rounded-xl border border-dashed border-slate-300 p-12 text-center flex-col justify-center items-center ${activeTab !== 'tasks' ? 'flex' : 'hidden lg:flex'}`}>
             <Smartphone size={48} className="text-slate-300 mb-2" />
             <p className="text-sm font-semibold text-slate-500">Selecciona una orden de la lista para acceder a la terminal táctil de trabajo.</p>
           </div>

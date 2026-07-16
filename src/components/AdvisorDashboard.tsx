@@ -20,6 +20,8 @@ interface AdvisorDashboardProps {
   approveBudgetLine: (orderId: string, itemId: string, approved: boolean) => void;
   registerOrderPayment: (orderId: string, amount: number, method: 'Efectivo' | 'Tarjeta' | 'Transferencia' | 'Credito') => void;
   updateOrderStatus: (orderId: string, status: OrderStatus) => void;
+  activeTab?: 'reception' | 'quotes' | 'agenda' | 'crm';
+  setActiveTab?: (tab: 'reception' | 'quotes' | 'agenda' | 'crm') => void;
 }
 
 export default function AdvisorDashboard({
@@ -35,9 +37,13 @@ export default function AdvisorDashboard({
   deleteOrderItem,
   approveBudgetLine,
   registerOrderPayment,
-  updateOrderStatus
+  updateOrderStatus,
+  activeTab: propActiveTab,
+  setActiveTab: propSetActiveTab
 }: AdvisorDashboardProps) {
-  const [activeTab, setActiveTab] = useState<'reception' | 'quotes' | 'agenda' | 'crm'>('reception');
+  const [localTab, setLocalTab] = useState<'reception' | 'quotes' | 'agenda' | 'crm'>('reception');
+  const activeTab = propActiveTab || localTab;
+  const setActiveTab = propSetActiveTab || setLocalTab;
 
   // Search filter states
   const [clientSearch, setClientSearch] = useState('');

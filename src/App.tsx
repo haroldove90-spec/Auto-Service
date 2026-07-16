@@ -8,7 +8,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Shield, User, Wrench, Package, Car, Laptop, Clock, 
   Settings, CheckCircle2, ChevronRight, Menu, HelpCircle, AlertTriangle,
-  Smartphone, Download, X, Home, LogOut
+  Smartphone, Download, X, Home, LogOut, TrendingUp, BarChart2, DollarSign,
+  Users, Calendar, FileText, CheckSquare, FileCheck, BellRing, ClipboardList
 } from 'lucide-react';
 import { useWorkshopState } from './useWorkshopState';
 import { UserRole } from './types';
@@ -64,6 +65,13 @@ export default function App() {
 
   // Active view role
   const [currentRole, setCurrentRole] = useState<UserRole>('admin');
+
+  // Sub-modules tab states for synchronized bottom navigation
+  const [adminTab, setAdminTab] = useState<'metrics' | 'preventive' | 'finances' | 'personnel' | 'config'>('metrics');
+  const [advisorTab, setAdvisorTab] = useState<'reception' | 'quotes' | 'agenda' | 'crm'>('reception');
+  const [mechanicTab, setMechanicTab] = useState<'tasks' | 'diagnostics' | 'requisitions'>('tasks');
+  const [warehouseTab, setWarehouseTab] = useState<'catalog' | 'requisitions' | 'purchases'>('catalog');
+  const [clientTab, setClientTab] = useState<'tracking' | 'budget' | 'alerts'>('tracking');
   
   // Landing page active state
   const [showLanding, setShowLanding] = useState(true);
@@ -113,6 +121,46 @@ export default function App() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const getBottomNavItems = () => {
+    switch (currentRole) {
+      case 'admin':
+        return [
+          { id: 'metrics', label: 'KPIs', icon: TrendingUp, onClick: () => setAdminTab('metrics'), isActive: adminTab === 'metrics' },
+          { id: 'preventive', label: 'Preventivos', icon: Calendar, onClick: () => setAdminTab('preventive'), isActive: adminTab === 'preventive' },
+          { id: 'finances', label: 'Finanzas', icon: DollarSign, onClick: () => setAdminTab('finances'), isActive: adminTab === 'finances' },
+          { id: 'personnel', label: 'Personal', icon: Users, onClick: () => setAdminTab('personnel'), isActive: adminTab === 'personnel' },
+          { id: 'config', label: 'Ajustes', icon: Settings, onClick: () => setAdminTab('config'), isActive: adminTab === 'config' },
+        ];
+      case 'advisor':
+        return [
+          { id: 'reception', label: 'Recepc.', icon: Car, onClick: () => setAdvisorTab('reception'), isActive: advisorTab === 'reception' },
+          { id: 'quotes', label: 'Cotizar', icon: DollarSign, onClick: () => setAdvisorTab('quotes'), isActive: advisorTab === 'quotes' },
+          { id: 'agenda', label: 'Agenda', icon: Calendar, onClick: () => setAdvisorTab('agenda'), isActive: advisorTab === 'agenda' },
+          { id: 'crm', label: 'Historial', icon: Clock, onClick: () => setAdvisorTab('crm'), isActive: advisorTab === 'crm' },
+        ];
+      case 'mechanic':
+        return [
+          { id: 'tasks', label: 'Tareas', icon: CheckSquare, onClick: () => setMechanicTab('tasks'), isActive: mechanicTab === 'tasks' },
+          { id: 'diagnostics', label: 'Diagnóst.', icon: FileText, onClick: () => setMechanicTab('diagnostics'), isActive: mechanicTab === 'diagnostics' },
+          { id: 'requisitions', label: 'Refacc.', icon: Package, onClick: () => setMechanicTab('requisitions'), isActive: mechanicTab === 'requisitions' },
+        ];
+      case 'warehouse':
+        return [
+          { id: 'catalog', label: 'Catálogo', icon: Package, onClick: () => setWarehouseTab('catalog'), isActive: warehouseTab === 'catalog' },
+          { id: 'requisitions', label: 'Requisic.', icon: ClipboardList, onClick: () => setWarehouseTab('requisitions'), isActive: warehouseTab === 'requisitions' },
+          { id: 'purchases', label: 'Compras', icon: DollarSign, onClick: () => setWarehouseTab('purchases'), isActive: warehouseTab === 'purchases' },
+        ];
+      case 'client':
+        return [
+          { id: 'tracking', label: 'Seguim.', icon: Clock, onClick: () => setClientTab('tracking'), isActive: clientTab === 'tracking' },
+          { id: 'budget', label: 'Presup.', icon: FileCheck, onClick: () => setClientTab('budget'), isActive: clientTab === 'budget' },
+          { id: 'alerts', label: 'Alertas', icon: BellRing, onClick: () => setClientTab('alerts'), isActive: clientTab === 'alerts' },
+        ];
+      default:
+        return [];
+    }
+  };
 
   return (
     <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-slate-100 font-sans text-slate-800 flex flex-col selection:bg-amber-600 selection:text-white ${!showLanding ? 'pb-24' : ''}`}>
@@ -344,6 +392,8 @@ export default function App() {
                     addTransaction={addTransaction}
                     handleClientCreditPayment={handleClientCreditPayment}
                     resetDatabase={resetDatabase}
+                    activeTab={adminTab}
+                    setActiveTab={setAdminTab}
                   />
                 )}
 
@@ -362,6 +412,8 @@ export default function App() {
                     approveBudgetLine={approveBudgetLine}
                     registerOrderPayment={registerOrderPayment}
                     updateOrderStatus={updateOrderStatus}
+                    activeTab={advisorTab}
+                    setActiveTab={setAdvisorTab}
                   />
                 )}
 
@@ -378,6 +430,8 @@ export default function App() {
                     updateOrderDiagnostics={updateOrderDiagnostics}
                     submitPartRequisition={submitPartRequisition}
                     updateOrderStatus={updateOrderStatus}
+                    activeTab={mechanicTab}
+                    setActiveTab={setMechanicTab}
                   />
                 )}
 
@@ -395,6 +449,8 @@ export default function App() {
                     receivePurchaseOrder={receivePurchaseOrder}
                     handleRequisitionStatus={handleRequisitionStatus}
                     addSupplier={addSupplier}
+                    activeTab={warehouseTab}
+                    setActiveTab={setWarehouseTab}
                   />
                 )}
 
@@ -404,6 +460,8 @@ export default function App() {
                     vehicles={vehicles}
                     orders={orders}
                     approveBudgetLine={approveBudgetLine}
+                    activeTab={clientTab}
+                    setActiveTab={setClientTab}
                   />
                 )}
               </motion.div>
@@ -497,34 +555,30 @@ export default function App() {
       {!showLanding && (
         <div className="fixed bottom-0 left-0 right-0 bg-[#0D0D0D]/95 backdrop-blur-md border-t-2 border-[#FA5210]/50 py-1.5 px-2 sm:px-4 shadow-2xl z-40 block">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-6 gap-1 w-full text-center">
+            <div 
+              className="grid gap-1 w-full text-center"
+              style={{ gridTemplateColumns: `repeat(${getBottomNavItems().length + 1}, minmax(0, 1fr))` }}
+            >
               
-              {/* Logout / Salir Button */}
+              {/* Back / Salir / Rol Button */}
               <button
                 onClick={() => setShowLanding(true)}
                 className="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 py-1 px-1.5 rounded-xl transition-all text-red-400 hover:text-red-300 hover:bg-red-500/10 cursor-pointer"
-                title="Cerrar Sesión y Cambiar de Rol"
+                title="Volver a Selección de Roles"
               >
                 <LogOut className="w-5 h-5 sm:w-4 sm:h-4 text-red-500 shrink-0" />
-                <span className="text-[9px] sm:text-xs font-bold">Salir / Rol</span>
+                <span className="text-[9px] sm:text-xs font-bold">Volver / Rol</span>
               </button>
 
-              {/* Roles Buttons */}
-              {[
-                { id: 'admin', label: 'Admin', icon: Shield },
-                { id: 'advisor', label: 'Asesor', icon: User },
-                { id: 'mechanic', label: 'Mecánico', icon: Wrench },
-                { id: 'warehouse', label: 'Almacén', icon: Package },
-                { id: 'client', label: 'Cliente', icon: Car }
-              ].map((item) => {
+              {/* Dynamic Module Nav Buttons */}
+              {getBottomNavItems().map((item) => {
                 const IconComponent = item.icon;
-                const isActive = currentRole === item.id;
                 return (
                   <button
                     key={item.id}
-                    onClick={() => setCurrentRole(item.id as UserRole)}
+                    onClick={item.onClick}
                     className={`flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 py-1 px-1.5 rounded-xl transition-all cursor-pointer ${
-                      isActive 
+                      item.isActive 
                         ? 'bg-[#FA5210] text-white border border-white/10 shadow-lg shadow-[#FA5210]/10' 
                         : 'text-slate-300 hover:text-white hover:bg-white/5'
                     }`}

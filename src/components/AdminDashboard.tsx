@@ -22,6 +22,8 @@ interface AdminDashboardProps {
   addTransaction: (t: Omit<Transaction, 'id' | 'date'>) => void;
   handleClientCreditPayment: (clientId: string, amount: number, method: 'Efectivo' | 'Tarjeta' | 'Transferencia') => void;
   resetDatabase: () => void;
+  activeTab?: 'metrics' | 'preventive' | 'finances' | 'personnel' | 'config';
+  setActiveTab?: (tab: 'metrics' | 'preventive' | 'finances' | 'personnel' | 'config') => void;
 }
 
 export default function AdminDashboard({
@@ -39,9 +41,13 @@ export default function AdminDashboard({
   updateEmployee,
   addTransaction,
   handleClientCreditPayment,
-  resetDatabase
+  resetDatabase,
+  activeTab: propActiveTab,
+  setActiveTab: propSetActiveTab
 }: AdminDashboardProps) {
-  const [activeTab, setActiveTab] = useState<'metrics' | 'preventive' | 'finances' | 'personnel' | 'config'>('metrics');
+  const [localTab, setLocalTab] = useState<'metrics' | 'preventive' | 'finances' | 'personnel' | 'config'>('metrics');
+  const activeTab = propActiveTab || localTab;
+  const setActiveTab = propSetActiveTab || setLocalTab;
   
   // Interactive Master Calendar states
   const [calendarView, setCalendarView] = useState<'month' | 'week' | 'day'>('month');
