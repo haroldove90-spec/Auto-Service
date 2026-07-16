@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom Color Palette aligned with user request: #0D0D0D, #FA5210, #A5A3B1, #DAD8E3 */
+  --color-slate-50: rgba(255, 255, 255, 0.02);
+  --color-slate-100: #0D0D0D;
+  --color-slate-200: rgba(165, 163, 177, 0.12);
+  --color-slate-300: rgba(165, 163, 177, 0.25);
+  --color-slate-400: #DAD8E3;
+  --color-slate-500: #A5A3B1;
+  --color-slate-600: #A5A3B1;
+  --color-slate-700: #DAD8E3;
+  --color-slate-800: #DAD8E3;
+  --color-slate-900: #0D0D0D;
+}
+
+/* Base Body Styles - Immersive `#0D0D0D` background with a subtle orange ambient radial glow at the top */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden !important;
+}
+
+body {
+  background-color: #0D0D0D !important;
+  background-image: radial-gradient(circle at 50% 0%, #301408 0%, #0D0D0D 75%) !important;
+  color: #DAD8E3 !important;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+/* Master background override for slate-100 container */
+.bg-slate-100 {
+  background-color: transparent !important;
+}
+
+/* Premium Semi-Transparent Glass Surfaces (Panels/Cards) with thin borders */
+.bg-white {
+  background-color: rgba(13, 13, 13, 0.6) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-color: rgba(165, 163, 177, 0.15) !important;
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.8) !important;
+}
+
+.bg-slate-50 {
+  background-color: rgba(255, 255, 255, 0.01) !important;
+  border-color: rgba(165, 163, 177, 0.08) !important;
+}
+
+/* Global Text Remapping for Light/Lavendar Text requested by user */
+.text-slate-800, 
+.text-slate-900, 
+.text-slate-700, 
+.text-slate-600,
+p, h1, h2, h3, h4, h5, h6, span, label, th, td, option {
+  color: #DAD8E3 !important;
+}
+
+/* Sub-text or muted text styles */
+.text-slate-500, 
+.text-slate-400 {
+  color: #A5A3B1 !important; /* Soft gray for hierarchy */
+}
+
+.text-slate-300 {
+  color: #8C8A99 !important;
+}
+
+/* 🏆 ORANGE ACCENT (#FA5210) MASTER CLASS OVERRIDES */
+/* This converts all standard UI action colors to the requested orange theme */
+.bg-amber-600, 
+.bg-amber-50,
+.bg-amber-500,
+.bg-[#8D6A28],
+.bg-indigo-600,
+.bg-blue-600,
+.bg-emerald-600,
+.bg-emerald-500,
+button[type="submit"],
+.bg-slate-800 {
+  background-color: #FA5210 !important;
+  color: #FFFFFF !important;
+  border-color: #FA5210 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Hover effects for orange buttons */
+.hover\:bg-amber-700:hover, 
+.hover\:bg-amber-600:hover,
+.hover\:bg-indigo-700:hover,
+.hover\:bg-blue-700:hover,
+.hover\:bg-emerald-700:hover,
+.hover\:bg-slate-900:hover,
+.bg-amber-600:hover,
+.bg-amber-500:hover,
+.bg-[#FA5210]:hover,
+.bg-[#8D6A28]:hover,
+button[type="submit"]:hover {
+  background-color: #ff6c30 !important; /* Lighter orange for premium hover */
+  color: #FFFFFF !important;
+  box-shadow: 0 0 15px rgba(250, 82, 16, 0.5) !important;
+}
+
+/* Elegant Role Selection Cards in the Landing Page */
+.role-card {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(165, 163, 177, 0.15) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.role-card:hover {
+  background-color: rgba(250, 82, 16, 0.06) !important;
+  border-color: #FA5210 !important;
+  box-shadow: 0 12px 30px rgba(250, 82, 16, 0.25) !important;
+  transform: translateY(-4px) !important;
+}
+
+.role-card:hover .text-slate-800 {
+  color: #FFFFFF !important;
+}
+
+/* Icon inside the role-card should pop nicely on hover */
+.role-card:hover .p-3,
+.role-card:hover .p-4 {
+  background-color: #FA5210 !important;
+  color: #FFFFFF !important;
+  border-color: #FA5210 !important;
+  box-shadow: 0 0 15px rgba(250, 82, 16, 0.4) !important;
+}
+
+/* Muted or outline buttons */
+.border-amber-500, 
+.border-amber-600,
+.border-indigo-200,
+.border-slate-200 {
+  border-color: rgba(250, 82, 16, 0.4) !important;
+}
+
+/* Orange Text Accent */
+.text-amber-600, 
+.text-amber-700, 
+.text-amber-800, 
+.text-amber-900,
+.text-indigo-700,
+.text-[#F8B232],
+.text-emerald-600,
+.text-indigo-600,
+a {
+  color: #FA5210 !important; /* legile orange for text */
+}
+
+/* Borders Global Alignment */
+.border, 
+.border-slate-100, 
+.border-slate-200, 
+.border-slate-300, 
+.border-slate-200\/50, 
+.border-dashed {
+  border-color: rgba(165, 163, 177, 0.15) !important;
+}
+
+/* Table Enhancements */
+thead tr {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border-bottom: 1px solid rgba(165, 163, 177, 0.15) !important;
+}
+
+tr {
+  border-bottom: 1px solid rgba(165, 163, 177, 0.08) !important;
+}
+
+tr:hover {
+  background-color: rgba(255, 255, 255, 0.01) !important;
+}
+
+td {
+  border-bottom: 1px solid rgba(165, 163, 177, 0.08) !important;
+}
+
+/* Dark Mode Inputs, Dropdowns, and Textareas */
+input[type="text"], 
+input[type="number"], 
+input[type="tel"], 
+input[type="email"], 
+input[type="date"], 
+select, 
+textarea {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  color: #DAD8E3 !important;
+  border: 1px solid rgba(165, 163, 177, 0.3) !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+input[type="text"]:focus, 
+input[type="number"]:focus, 
+input[type="tel"]:focus, 
+input[type="email"]:focus, 
+input[type="date"]:focus, 
+select:focus, 
+textarea:focus {
+  border-color: #FA5210 !important;
+  box-shadow: 0 0 0 2px rgba(250, 82, 16, 0.3) !important;
+  outline: none !important;
+}
+
+/* Option element styling inside dark select dropdowns */
+option {
+  background-color: #0D0D0D !important;
+  color: #DAD8E3 !important;
+}
+
+/* Glowing Cybernetic Role Status Headers & Banners */
+.bg-amber-50, 
+.bg-blue-50, 
+.bg-orange-50, 
+.bg-purple-50, 
+.bg-emerald-50,
+.bg-yellow-50,
+.bg-pink-50,
+.bg-red-50,
+.bg-green-50 {
+  background-color: rgba(250, 82, 16, 0.08) !important;
+  border-color: rgba(250, 82, 16, 0.3) !important;
+}
+
+/* Badges and Highlights */
+.bg-amber-100,
+.bg-red-100,
+.bg-emerald-100,
+.bg-indigo-100,
+.bg-blue-100,
+.bg-orange-100 {
+  background-color: rgba(250, 82, 16, 0.2) !important;
+  border: 1px solid rgba(250, 82, 16, 0.3) !important;
+  color: #FFFFFF !important;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(250, 82, 16, 0.5);
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .7;
+  }
+}
