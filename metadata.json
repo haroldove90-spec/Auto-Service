@@ -1,6 +1,6 @@
 {
-  "name": "Auto Service",
-  "description": "Mantenimiento Automotriz",
+  "name": "T+H",
+  "description": "T+H Automotive - Mantenimiento Automotriz",
   "requestFramePermissions": [
     "camera"
   ],

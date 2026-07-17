@@ -1,27 +1,27 @@
 {
-  "short_name": "Auto Service",
-  "name": "Auto Service",
+  "short_name": "T+H",
+  "name": "T+H Automotive",
   "icons": [
     {
-      "src": "https://appdesignproyectos.com/autoserviceicono.png",
+      "src": "https://appdesignproyectos.com/thaicono.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://appdesignproyectos.com/autoserviceicono.png",
+      "src": "https://appdesignproyectos.com/thaicono.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://appdesignproyectos.com/autoserviceicono.png",
+      "src": "https://appdesignproyectos.com/thaicono.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "https://appdesignproyectos.com/autoserviceicono.png",
+      "src": "https://appdesignproyectos.com/thaicono.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

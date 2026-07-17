@@ -639,13 +639,13 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
 ];
 
 export const INITIAL_SETTINGS: WorkshopSettings = {
-  name: 'Auto Service',
+  name: 'T+H Automotive',
   rfc: 'AUT150820MX7',
   address: 'Mixtecas 288, Ajusco, Coyoacán, 04300 Ciudad de México, CDMX',
   phone: '55 1384 6680',
-  email: 'contacto@autoservice.com.mx',
-  logoUrl: 'https://appdesignproyectos.com/autoservice.png', // Logo provided by user
+  email: 'contacto@thautomotive.com.mx',
+  logoUrl: 'https://appdesignproyectos.com/tha.png', // Logo provided by user
   terms: '1. Toda cotización tiene una vigencia de 15 días naturales.\n2. No nos hacemos responsables por objetos de valor no registrados en el inventario/checklist de entrada.\n3. Los vehículos con más de 48 horas de listos sin ser retirados causarán un costo de resguardo de $150 MXN por día.',
   taxRate: 16, // IVA 16% México
-  bankDetails: 'Banco BBVA Bancomer • Beneficiario: Auto Service S.A. de C.V. • Cuenta: 0123 4567 8901 • CLABE: 0121 8000 1234 5678 90'
+  bankDetails: 'Banco BBVA Bancomer • Beneficiario: T+H Automotive S.A. de C.V. • Cuenta: 0123 4567 8901 • CLABE: 0121 8000 1234 5678 90'
 };

@@ -174,17 +174,17 @@ export default function App() {
             <div className="flex items-center gap-3 min-w-0">
               <div className="relative flex-shrink-0">
                 <img 
-                  src="https://appdesignproyectos.com/autoservice.png" 
-                  alt="Auto Service" 
+                  src="https://appdesignproyectos.com/tha.png" 
+                  alt="T+H Automotive" 
                   className="h-10 w-auto sm:h-14 object-contain bg-black/40 p-1 rounded-xl border border-white/10 shadow-sm"
                   referrerPolicy="no-referrer"
                 />
               </div>
               <div className="min-w-0">
                 <h1 className="text-xs sm:text-lg md:text-xl font-bold font-display text-slate-800 tracking-tight flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                  <span className="truncate">AUTO SERVICE</span>
+                  <span className="truncate">T+H Automotive</span>
                   <span className="text-[8px] sm:text-[10px] bg-[#FA5210] text-white px-1.5 sm:px-2 py-0.5 rounded-full font-sans font-semibold uppercase border border-[#FA5210]/20 shrink-0 w-fit">
-                    Auto Service PWA
+                    T+H PWA
                   </span>
                 </h1>
                 <p className="text-xs text-slate-400 font-mono mt-0.5 hidden lg:flex items-center gap-1.5">
@@ -224,10 +224,10 @@ export default function App() {
                 onClick={handleInstallClick}
                 id="pwa-install-nav-btn"
                 className="flex items-center gap-2 bg-[#FA5210] text-white px-4 py-2.5 rounded-xl font-bold border border-white/10 hover:bg-[#ff6c30] transition-all text-xs cursor-pointer shadow-md hover:shadow-[#FA5210]/20"
-                title="Instalar Aplicación Auto Service en tu dispositivo"
+                title="Instalar Aplicación T+H en tu dispositivo"
               >
                 <Smartphone size={15} className="animate-pulse text-amber-300" />
-                <span>Instalar App Auto Service</span>
+                <span>Instalar App T+H</span>
               </button>
 
               {/* CDMX Time Tracker */}
@@ -277,10 +277,10 @@ export default function App() {
               transition={{ duration: 0.5 }}
               className="w-full max-w-4xl flex flex-col items-center text-center"
             >
-              {/* Majestic Auto Service Logo */}
+              {/* Majestic T+H Automotive Logo */}
               <img 
-                src="https://appdesignproyectos.com/autoservice.png" 
-                alt="Auto Service" 
+                src="https://appdesignproyectos.com/tha.png" 
+                alt="T+H Automotive" 
                 className="h-28 sm:h-36 w-auto object-contain bg-black/40 p-3 rounded-2xl border border-white/10 shadow-2xl mb-12"
                 referrerPolicy="no-referrer"
               />
@@ -322,7 +322,7 @@ export default function App() {
                   className="flex items-center gap-2 bg-[#FA5210] text-white px-6 py-3 rounded-xl font-bold border border-white/10 hover:bg-[#ff6c30] transition-all text-xs cursor-pointer shadow-lg hover:shadow-[#FA5210]/20"
                 >
                   <Smartphone size={16} className="animate-pulse text-amber-300" />
-                  <span>Instalar Aplicación Auto Service</span>
+                  <span>Instalar Aplicación T+H</span>
                 </button>
               </div>
             </motion.div>
@@ -474,13 +474,13 @@ export default function App() {
       {/* COMPLIANT FOOTER */}
       <footer className="bg-white border-t border-slate-200 mt-12 py-6 px-6 text-xs text-center text-slate-400 space-y-2">
         <p className="max-w-2xl mx-auto">
-          <strong>Auto Service Dashboard</strong> • Desarrollado con los más altos estándares de fidelidad y usabilidad interactiva. Sincronización local persistente en tiempo real.
+          <strong>T+H Automotive Dashboard</strong> • Desarrollado con los más altos estándares de fidelidad y usabilidad interactiva. Sincronización local persistente en tiempo real.
         </p>
         <p className="text-[11px] font-semibold text-slate-500">
           Programa desarrollado por <span className="text-[#FA5210]">App Design</span> - D.G. Harold Anguiano
         </p>
         <p className="font-mono text-[10px]">
-          Simulación de Operación Mecánica • Port 3000 • CDMX Verificación Vehicular Integrada • Licencia Comercial Auto Service
+          Simulación de Operación Mecánica • Port 3000 • CDMX Verificación Vehicular Integrada • Licencia Comercial T+H Automotive
         </p>
       </footer>
 
@@ -503,14 +503,14 @@ export default function App() {
 
               <div className="flex flex-col items-center text-center space-y-4">
                 <img 
-                  src="https://appdesignproyectos.com/autoserviceicono.png" 
-                  alt="Auto Service Icono" 
+                  src="https://appdesignproyectos.com/thaicono.png" 
+                  alt="T+H Icono" 
                   className="w-16 h-16 rounded-2xl shadow-lg border border-[#FA5210]/30 object-contain"
                   referrerPolicy="no-referrer"
                 />
                 <div>
-                  <h3 className="text-xl font-bold font-display tracking-tight text-white">Instalar App Auto Service</h3>
-                  <p className="text-xs text-slate-400 mt-1">Lleva el Auto Service directamente en tu pantalla de inicio móvil o tablet.</p>
+                  <h3 className="text-xl font-bold font-display tracking-tight text-white">Instalar App T+H</h3>
+                  <p className="text-xs text-slate-400 mt-1">Lleva T+H directamente en tu pantalla de inicio móvil o tablet.</p>
                 </div>
               </div>
 
@@ -521,9 +521,9 @@ export default function App() {
                     <span>En iPhone y iPad (Safari):</span>
                   </h4>
                   <ol className="list-decimal list-inside text-xs text-slate-300 mt-2 space-y-1 pl-1">
-                    <li>Toca el botón <strong className="text-white">Compartir</strong> (icono de cuadrado con flecha hacia arriba) en la barra de navegación.</li>
+                    <li>Toca el botón <strong className="text-white">Compartir</strong> (icono de cuadrado con arrow hacia arriba) en la barra de navegación.</li>
                     <li>Desplázate hacia abajo y selecciona <strong className="text-white">"Agregar a Inicio"</strong>.</li>
-                    <li>Confirma el nombre <strong className="text-white">Auto Service</strong> para tener acceso inmediato.</li>
+                    <li>Confirma el nombre <strong className="text-white">T+H</strong> para tener acceso inmediato.</li>
                   </ol>
                 </div>
 
