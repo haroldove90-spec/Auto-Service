@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, OrderStatus, BudgetLineItem, TimeLog, MaintenanceOrder } from './types';
+import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, OrderStatus, BudgetLineItem, TimeLog, MaintenanceOrder, EquipmentCalendarRow, PredictiveMaintenanceRecord, MaintenanceReminder, PlannedFrequencyCode, ExecutionStatusCode } from './types';
 import { 
   INITIAL_CLIENTS, 
   INITIAL_VEHICLES, 
@@ -11,7 +11,10 @@ import {
   INITIAL_ORDERS, 
   INITIAL_TRANSACTIONS, 
   INITIAL_SETTINGS,
-  INITIAL_MAINTENANCE_ORDERS
+  INITIAL_MAINTENANCE_ORDERS,
+  INITIAL_CALENDAR_EQUIPMENT,
+  INITIAL_PREDICTIVE_RECORDS,
+  INITIAL_MAINTENANCE_REMINDERS
 } from './mockData';
 
 export function useWorkshopState() {
@@ -24,6 +27,9 @@ export function useWorkshopState() {
   const [requisitions, setRequisitions] = useState<PartRequisition[]>([]);
   const [orders, setOrders] = useState<ServiceOrder[]>([]);
   const [maintenanceOrders, setMaintenanceOrders] = useState<MaintenanceOrder[]>([]);
+  const [calendarEquipment, setCalendarEquipment] = useState<EquipmentCalendarRow[]>([]);
+  const [predictiveRecords, setPredictiveRecords] = useState<PredictiveMaintenanceRecord[]>([]);
+  const [reminders, setReminders] = useState<MaintenanceReminder[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [settings, setSettings] = useState<WorkshopSettings>(INITIAL_SETTINGS);
   const [loaded, setLoaded] = useState(false);
@@ -39,6 +45,9 @@ export function useWorkshopState() {
     const localRequisitions = localStorage.getItem('wt_requisitions');
     const localOrders = localStorage.getItem('wt_orders');
     const localMaintenanceOrders = localStorage.getItem('wt_mto_orders');
+    const localCalendarEquipment = localStorage.getItem('wt_calendar_equipment');
+    const localPredictiveRecords = localStorage.getItem('wt_predictive_records');
+    const localReminders = localStorage.getItem('wt_reminders');
     const localTransactions = localStorage.getItem('wt_transactions');
     const localSettings = localStorage.getItem('wt_settings');
 
@@ -51,6 +60,9 @@ export function useWorkshopState() {
     setRequisitions(localRequisitions ? JSON.parse(localRequisitions) : INITIAL_REQUISITIONS);
     setOrders(localOrders ? JSON.parse(localOrders) : INITIAL_ORDERS);
     setMaintenanceOrders(localMaintenanceOrders ? JSON.parse(localMaintenanceOrders) : INITIAL_MAINTENANCE_ORDERS);
+    setCalendarEquipment(localCalendarEquipment ? JSON.parse(localCalendarEquipment) : INITIAL_CALENDAR_EQUIPMENT);
+    setPredictiveRecords(localPredictiveRecords ? JSON.parse(localPredictiveRecords) : INITIAL_PREDICTIVE_RECORDS);
+    setReminders(localReminders ? JSON.parse(localReminders) : INITIAL_MAINTENANCE_REMINDERS);
     setTransactions(localTransactions ? JSON.parse(localTransactions) : INITIAL_TRANSACTIONS);
     let parsedSettings = localSettings ? JSON.parse(localSettings) : INITIAL_SETTINGS;
     if (parsedSettings && parsedSettings.address && (parsedSettings.address.includes('Palmas') || parsedSettings.address.includes('palmas'))) {
@@ -60,6 +72,7 @@ export function useWorkshopState() {
     setSettings(parsedSettings);
     setLoaded(true);
   }, []);
+
 
   // Sync to LocalStorage
   useEffect(() => {
@@ -107,11 +120,26 @@ export function useWorkshopState() {
     localStorage.setItem('wt_mto_orders', JSON.stringify(maintenanceOrders));
   }, [maintenanceOrders, loaded]);
 
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem('wt_calendar_equipment', JSON.stringify(calendarEquipment));
+  }, [calendarEquipment, loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem('wt_predictive_records', JSON.stringify(predictiveRecords));
+  }, [predictiveRecords, loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem('wt_reminders', JSON.stringify(reminders));
+  }, [reminders, loaded]);
 
   useEffect(() => {
     if (!loaded) return;
     localStorage.setItem('wt_transactions', JSON.stringify(transactions));
   }, [transactions, loaded]);
+
 
   useEffect(() => {
     if (!loaded) return;
@@ -552,6 +580,128 @@ export function useWorkshopState() {
     setMaintenanceOrders(prev => prev.filter(o => o.id !== id));
   };
 
+  // 11. Predictive Maintenance & Calendar CRUD
+  const addEquipmentToCalendar = (eq: Omit<EquipmentCalendarRow, 'id'>) => {
+    const newEq: EquipmentCalendarRow = {
+      ...eq,
+      id: `eq-${Date.now()}`
+    };
+    setCalendarEquipment(prev => [...prev, newEq]);
+    return newEq;
+  };
+
+  const updateCalendarCell = (
+    equipmentId: string, 
+    weekNumber: number, 
+    cellType: 'planned' | 'realized', 
+    value: PlannedFrequencyCode | ExecutionStatusCode | ''
+  ) => {
+    setCalendarEquipment(prev => prev.map(eq => {
+      if (eq.id !== equipmentId) return eq;
+      const updatedObj = { ...eq[cellType] };
+      if (!value) {
+        delete updatedObj[weekNumber];
+      } else {
+        updatedObj[weekNumber] = value as any;
+      }
+      return {
+        ...eq,
+        [cellType]: updatedObj
+      };
+    }));
+  };
+
+  const updateEquipmentDetails = (id: string, partial: Partial<EquipmentCalendarRow>) => {
+    setCalendarEquipment(prev => prev.map(eq => eq.id === id ? { ...eq, ...partial } : eq));
+  };
+
+  const deleteEquipmentFromCalendar = (id: string) => {
+    setCalendarEquipment(prev => prev.filter(eq => eq.id !== id));
+  };
+
+  // 12. Predictive Records CRUD
+  const addPredictiveRecord = (rec: Omit<PredictiveMaintenanceRecord, 'id'>) => {
+    const newRec: PredictiveMaintenanceRecord = {
+      ...rec,
+      id: `rec-${Date.now()}`
+    };
+    setPredictiveRecords(prev => [newRec, ...prev]);
+
+    // Automatically check if reminder should be created
+    if (rec.executionStatus === 'X') {
+      addReminder({
+        title: `Mantenimiento Reprogramado (S${rec.weekNumber})`,
+        equipmentName: rec.equipmentName,
+        weekNumber: rec.weekNumber,
+        type: 'VENCIDO',
+        dueDate: rec.scheduledDate,
+        urgency: 'CRITICA',
+        message: `El mantenimiento para ${rec.equipmentName} registrado en la semana ${rec.weekNumber} ha sido pospuesto/reprogramado. Razón: ${rec.observations}`,
+        read: false,
+        attended: false,
+        createdAt: new Date().toISOString().slice(0, 16).replace('T', ' ')
+      });
+    } else if (rec.executionStatus === 'EC') {
+      addReminder({
+        title: `🚨 Alerta de Equipo Caído (S${rec.weekNumber})`,
+        equipmentName: rec.equipmentName,
+        weekNumber: rec.weekNumber,
+        type: 'EQUIPO_CAIDO',
+        dueDate: rec.scheduledDate,
+        urgency: 'CRITICA',
+        message: `EQUIPO CAÍDO: ${rec.equipmentName}. Requiere intervención técnica urgente.`,
+        read: false,
+        attended: false,
+        createdAt: new Date().toISOString().slice(0, 16).replace('T', ' ')
+      });
+    }
+
+    return newRec;
+  };
+
+  const updatePredictiveRecord = (id: string, partial: Partial<PredictiveMaintenanceRecord>) => {
+    setPredictiveRecords(prev => prev.map(r => r.id === id ? { ...r, ...partial } : r));
+  };
+
+  const deletePredictiveRecord = (id: string) => {
+    setPredictiveRecords(prev => prev.filter(r => r.id !== id));
+  };
+
+  // 13. Reminders & Notifications CRUD
+  const addReminder = (rem: Omit<MaintenanceReminder, 'id'>) => {
+    const newRem: MaintenanceReminder = {
+      ...rem,
+      id: `rem-${Date.now()}`
+    };
+    setReminders(prev => [newRem, ...prev]);
+
+    // Send browser desktop notification if supported & permitted
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(newRem.title, {
+          body: `${newRem.equipmentName}: ${newRem.message}`,
+          icon: '/favicon.ico'
+        });
+      } catch (e) {
+        console.log('Notification API error:', e);
+      }
+    }
+
+    return newRem;
+  };
+
+  const markReminderAttended = (id: string) => {
+    setReminders(prev => prev.map(r => r.id === id ? { ...r, attended: true, read: true } : r));
+  };
+
+  const markReminderRead = (id: string) => {
+    setReminders(prev => prev.map(r => r.id === id ? { ...r, read: true } : r));
+  };
+
+  const deleteReminder = (id: string) => {
+    setReminders(prev => prev.filter(r => r.id !== id));
+  };
+
   // Reset database to initial values
   const resetDatabase = () => {
     setClients(INITIAL_CLIENTS);
@@ -563,6 +713,9 @@ export function useWorkshopState() {
     setRequisitions(INITIAL_REQUISITIONS);
     setOrders(INITIAL_ORDERS);
     setMaintenanceOrders(INITIAL_MAINTENANCE_ORDERS);
+    setCalendarEquipment(INITIAL_CALENDAR_EQUIPMENT);
+    setPredictiveRecords(INITIAL_PREDICTIVE_RECORDS);
+    setReminders(INITIAL_MAINTENANCE_REMINDERS);
     setTransactions(INITIAL_TRANSACTIONS);
     setSettings(INITIAL_SETTINGS);
     
@@ -575,9 +728,13 @@ export function useWorkshopState() {
     localStorage.setItem('wt_requisitions', JSON.stringify(INITIAL_REQUISITIONS));
     localStorage.setItem('wt_orders', JSON.stringify(INITIAL_ORDERS));
     localStorage.setItem('wt_mto_orders', JSON.stringify(INITIAL_MAINTENANCE_ORDERS));
+    localStorage.setItem('wt_calendar_equipment', JSON.stringify(INITIAL_CALENDAR_EQUIPMENT));
+    localStorage.setItem('wt_predictive_records', JSON.stringify(INITIAL_PREDICTIVE_RECORDS));
+    localStorage.setItem('wt_reminders', JSON.stringify(INITIAL_MAINTENANCE_REMINDERS));
     localStorage.setItem('wt_transactions', JSON.stringify(INITIAL_TRANSACTIONS));
     localStorage.setItem('wt_settings', JSON.stringify(INITIAL_SETTINGS));
   };
+
 
   return {
     clients,
@@ -589,6 +746,9 @@ export function useWorkshopState() {
     requisitions,
     orders,
     maintenanceOrders,
+    calendarEquipment,
+    predictiveRecords,
+    reminders,
     transactions,
     settings,
     setSettings,
@@ -621,7 +781,19 @@ export function useWorkshopState() {
     addMaintenanceOrder,
     updateMaintenanceOrder,
     deleteMaintenanceOrder,
+    addEquipmentToCalendar,
+    updateCalendarCell,
+    updateEquipmentDetails,
+    deleteEquipmentFromCalendar,
+    addPredictiveRecord,
+    updatePredictiveRecord,
+    deletePredictiveRecord,
+    addReminder,
+    markReminderAttended,
+    markReminderRead,
+    deleteReminder,
     resetDatabase
+
   };
 
 }

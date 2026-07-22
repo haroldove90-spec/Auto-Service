@@ -1,4 +1,4 @@
-import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, MaintenanceOrder } from './types';
+import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, MaintenanceOrder, EquipmentCalendarRow, PredictiveMaintenanceRecord, MaintenanceReminder } from './types';
 
 export const INITIAL_CLIENTS: Client[] = [
   {
@@ -706,4 +706,233 @@ export const INITIAL_MAINTENANCE_ORDERS: MaintenanceOrder[] = [
     tipoFalla: ['MECANICA', 'TERMINÓ EL PLAN DE PRODUCCIÓN']
   }
 ];
+
+export const INITIAL_CALENDAR_EQUIPMENT: EquipmentCalendarRow[] = [
+  {
+    id: 'eq-5201',
+    code: '5201',
+    name: 'Punzonadora 1',
+    assignedTechnician: 'A. Castellanos',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M', 52: 'A' },
+    realized: { 2: 'OK', 6: 'OK', 10: 'OK', 14: 'OK', 18: 'OK', 22: 'OK', 26: 'OK', 30: 'OK' }
+  },
+  {
+    id: 'eq-5202',
+    code: '5202',
+    name: 'Prensa Hidráulica',
+    assignedTechnician: 'Carlos M. Mantenimiento',
+    planned: { 5: 'B', 13: 'B', 21: 'B', 29: 'B', 37: 'B', 45: 'B' },
+    realized: { 3: 'OK', 8: 'OK', 19: 'OK', 27: 'OK' }
+  },
+  {
+    id: 'eq-5203',
+    code: '5203',
+    name: 'Pedrazzoli',
+    assignedTechnician: 'Roberto N.',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 5: 'X', 8: 'OK', 11: 'OK', 15: 'OK', 19: 'OK', 22: 'OK', 25: 'OK' }
+  },
+  {
+    id: 'eq-5204',
+    code: '5204',
+    name: 'Washing',
+    outOfService: true,
+    notes: 'EQUIPO FUERA DE USO EN REESTRUCTURACIÓN DE LÍNEA',
+    planned: {},
+    realized: {}
+  },
+  {
+    id: 'eq-5205',
+    code: '5205',
+    name: 'Tubex',
+    assignedTechnician: 'A. Castellanos',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 1: 'OK', 5: 'OK', 11: 'OK', 15: 'X', 17: 'OK', 21: 'OK' }
+  },
+  {
+    id: 'eq-5206',
+    code: '5206',
+    name: 'Tubimatic',
+    assignedTechnician: 'Fernando G.',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 3: 'OK', 6: 'OK', 10: 'OK', 12: 'OK', 16: 'OK', 20: 'OK', 23: 'OK' }
+  },
+  {
+    id: 'eq-5207',
+    code: '5207',
+    name: 'Punzonadora 2',
+    assignedTechnician: 'A. Castellanos',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 4: 'OK', 7: 'OK', 10: 'OK', 14: 'OK', 18: 'OK', 22: 'OK' }
+  },
+  {
+    id: 'eq-5208',
+    code: '5208',
+    name: 'BLM Bending',
+    assignedTechnician: 'Ing. T. Ruiz',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 5: 'OK', 8: 'OK', 11: 'OK', 15: 'OK', 19: 'OK', 22: 'OK' }
+  },
+  {
+    id: 'eq-5209',
+    code: '5209',
+    name: 'Chamfering',
+    assignedTechnician: 'Carlos M.',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 4: 'OK', 7: 'OK', 10: 'OK', 14: 'OK', 18: 'OK', 21: 'OK', 24: 'OK' }
+  },
+  {
+    id: 'eq-5210',
+    code: '5210',
+    name: 'Metal Cutter',
+    outOfService: true,
+    notes: 'EQUIPO FUERA DE USO',
+    planned: {},
+    realized: {}
+  },
+  {
+    id: 'eq-5211',
+    code: '5211',
+    name: 'END FORMING BLM',
+    assignedTechnician: 'A. Castellanos',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 3: 'OK', 6: 'OK', 10: 'OK', 13: 'OK', 18: 'OK', 21: 'OK' }
+  },
+  {
+    id: 'eq-5212',
+    code: '5212',
+    name: 'Prensa Hidráulica 2',
+    assignedTechnician: 'Ing. T. Ruiz',
+    planned: { 5: 'B', 13: 'B', 21: 'B', 29: 'B', 37: 'B', 45: 'B' },
+    realized: { 1: 'OK', 10: 'OK', 21: 'OK' }
+  },
+  {
+    id: 'eq-troq',
+    code: 'TR-01',
+    name: 'Troqueles Prensa',
+    assignedTechnician: 'A. Castellanos',
+    planned: { 5: 'M', 9: 'M', 13: 'M', 17: 'M', 21: 'M', 25: 'M', 29: 'M', 33: 'M', 37: 'M', 41: 'M', 45: 'M', 49: 'M' },
+    realized: { 5: 'OK', 8: 'OK', 11: 'OK', 16: 'OK', 20: 'OK', 23: 'OK' }
+  },
+  {
+    id: 'eq-comp15',
+    code: 'CP-15',
+    name: 'Compressor 15 HP',
+    assignedTechnician: 'Auxiliar Mantenimiento',
+    planned: { 5: 'M', 13: 'M', 21: 'M', 29: 'M', 37: 'M', 45: 'M' },
+    realized: { 5: 'PROCESO' }
+  },
+  {
+    id: 'eq-comp50',
+    code: 'CP-50',
+    name: 'Compressor 50 HP',
+    assignedTechnician: 'Auxiliar Mantenimiento',
+    planned: { 5: 'M', 13: 'M', 21: 'M', 29: 'M', 37: 'M', 45: 'M' },
+    realized: { 5: 'PENDIENTE' }
+  },
+  {
+    id: 'eq-subest',
+    code: 'SE-01',
+    name: 'Sub-estación eléctrica',
+    assignedTechnician: 'Ing. T. Ruiz',
+    planned: { 26: 'A', 52: 'A' },
+    realized: {}
+  }
+];
+
+export const INITIAL_PREDICTIVE_RECORDS: PredictiveMaintenanceRecord[] = [
+  {
+    id: 'rec-101',
+    equipmentId: 'eq-5201',
+    equipmentName: '5201 - Punzonadora 1',
+    weekNumber: 30,
+    monthName: 'JULIO',
+    frequency: 'MENSUAL',
+    plannedCode: 'M',
+    executionStatus: 'OK',
+    scheduledDate: '2026-07-20',
+    completionDate: '2026-07-21',
+    technician: 'A. Castellanos',
+    vibrationLevel: '1.1 mm/s RMS (Dentro de tolerancia ISO 10816)',
+    temperatureC: 42,
+    oilCondition: 'Excelente • Dieléctrico OK',
+    observations: 'Inspección de desgaste en dados y punzones. Lubricación neumática verificada y cambio de filtro de aire.'
+  },
+  {
+    id: 'rec-102',
+    equipmentId: 'eq-5203',
+    equipmentName: '5203 - Pedrazzoli',
+    weekNumber: 29,
+    monthName: 'JULIO',
+    frequency: 'PREDICTIVO',
+    plannedCode: 'P',
+    executionStatus: 'X',
+    scheduledDate: '2026-07-15',
+    technician: 'Roberto N.',
+    vibrationLevel: '3.8 mm/s RMS (Elevado en servomotor Y)',
+    temperatureC: 68,
+    oilCondition: 'Oscurecido • Muestra enviada a laboratorio',
+    observations: 'Se pospuso mantenimiento debido a alta carga de producción. Se re-programará para la semana 31.'
+  },
+  {
+    id: 'rec-103',
+    equipmentId: 'eq-5202',
+    equipmentName: '5202 - Prensa Hidráulica',
+    weekNumber: 29,
+    monthName: 'JULIO',
+    frequency: 'BIMESTRAL',
+    plannedCode: 'B',
+    executionStatus: 'OK',
+    scheduledDate: '2026-07-10',
+    completionDate: '2026-07-12',
+    technician: 'Carlos M. Mantenimiento',
+    vibrationLevel: '1.4 mm/s RMS',
+    temperatureC: 48,
+    oilCondition: 'Buen estado - Nivel a 95%',
+    observations: 'Cambio de sellos retenes en pistón principal y ajuste de torque en bancada.'
+  }
+];
+
+export const INITIAL_MAINTENANCE_REMINDERS: MaintenanceReminder[] = [
+  {
+    id: 'rem-1',
+    title: 'Mantenimiento Preventivo Próximo (Semana 30)',
+    equipmentName: '5201 - Punzonadora 1',
+    weekNumber: 30,
+    type: 'PROXIMO',
+    dueDate: '2026-07-25',
+    urgency: 'ALTA',
+    message: 'Programado mantenimiento mensual conforme a calendario anual 2026. Verificar insumos de lubricación.',
+    read: false,
+    attended: false,
+    createdAt: '2026-07-22 08:00'
+  },
+  {
+    id: 'rem-2',
+    title: 'Mantenimiento Pendiente / Reprogramado (Semana 29)',
+    equipmentName: '5203 - Pedrazzoli',
+    weekNumber: 29,
+    type: 'VENCIDO',
+    dueDate: '2026-07-18',
+    urgency: 'CRITICA',
+    message: 'Atención requerida: Registra estado [X] Reprogramado. Nivel de vibración elevado en servomotor Y.',
+    read: false,
+    attended: false,
+    createdAt: '2026-07-20 09:30'
+  },
+  {
+    id: 'rem-3',
+    title: 'Mantenimiento en Proceso',
+    equipmentName: 'CP-15 Compressor 15 HP',
+    weekNumber: 30,
+    type: 'EN_PROCESO',
+    dueDate: '2026-07-23',
+    urgency: 'MEDIA',
+    message: 'Mantenimiento preventivo iniciado. Reemplazo de purga automática y correas de transmisión.',
+    read: true,
+    attended: false,
+    createdAt: '2026-07-21 14:15'
+  }
+];
+
 

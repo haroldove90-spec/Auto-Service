@@ -197,3 +197,50 @@ export interface MaintenanceOrder {
   tipoFalla: string[]; // ['ELECTRICA', 'MECANICA', etc.]
 }
 
+export type PlannedFrequencyCode = 'M' | 'B' | 'A' | 'P'; // Mensual, Bimestral, Anual, Predictivo
+export type ExecutionStatusCode = 'OK' | 'X' | 'PROCESO' | 'EC' | 'PENDIENTE'; // Realizado, Reprogramado, En proceso, Equipo Caído, Pendiente
+
+export interface EquipmentCalendarRow {
+  id: string;
+  code: string; // e.g. "5201"
+  name: string; // e.g. "Punzonadora 1"
+  outOfService?: boolean;
+  notes?: string;
+  assignedTechnician?: string;
+  planned: { [weekNumber: number]: PlannedFrequencyCode }; // 1..52
+  realized: { [weekNumber: number]: ExecutionStatusCode }; // 1..52
+}
+
+export interface PredictiveMaintenanceRecord {
+  id: string;
+  equipmentId: string;
+  equipmentName: string;
+  weekNumber: number; // 1..52
+  monthName: string; // e.g. "ENERO"
+  frequency: 'MENSUAL' | 'BIMESTRAL' | 'ANUAL' | 'PREDICTIVO';
+  plannedCode: PlannedFrequencyCode;
+  executionStatus: ExecutionStatusCode;
+  scheduledDate: string;
+  completionDate?: string;
+  technician: string;
+  vibrationLevel?: string; // e.g. "1.2 mm/s (Normal)"
+  temperatureC?: number; // e.g. 45
+  oilCondition?: string; // e.g. "Bueno / Sin contaminantes"
+  observations: string;
+}
+
+export interface MaintenanceReminder {
+  id: string;
+  title: string;
+  equipmentName: string;
+  weekNumber: number;
+  type: 'PROXIMO' | 'VENCIDO' | 'EN_PROCESO' | 'EQUIPO_CAIDO';
+  dueDate: string;
+  urgency: 'CRITICA' | 'ALTA' | 'MEDIA' | 'INFO';
+  message: string;
+  read: boolean;
+  attended: boolean;
+  createdAt: string;
+}
+
+

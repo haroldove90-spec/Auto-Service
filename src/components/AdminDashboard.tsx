@@ -4,8 +4,14 @@ import {
   Plus, Search, Download, Trash, Check, X, Shield, RefreshCw, Layers, Award,
   Calendar, Clock, Activity, CheckSquare, Zap, BarChart2, Wrench
 } from 'lucide-react';
-import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PurchaseOrder, MaintenanceOrder } from '../types';
+import { 
+  Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, 
+  WorkshopSettings, PurchaseOrder, MaintenanceOrder, EquipmentCalendarRow, 
+  PredictiveMaintenanceRecord, MaintenanceReminder, PlannedFrequencyCode, ExecutionStatusCode 
+} from '../types';
 import MaintenanceOrdersModule from './MaintenanceOrdersModule';
+import PredictiveCalendarModule from './PredictiveCalendarModule';
+import RemindersModule from './RemindersModule';
 
 interface AdminDashboardProps {
   clients: Client[];
@@ -18,6 +24,27 @@ interface AdminDashboardProps {
   addMaintenanceOrder?: (order: Omit<MaintenanceOrder, 'id' | 'folio'>) => MaintenanceOrder;
   updateMaintenanceOrder?: (id: string, order: Partial<MaintenanceOrder>) => void;
   deleteMaintenanceOrder?: (id: string) => void;
+  
+  // Predictive Calendar & Reminders props
+  calendarEquipment?: EquipmentCalendarRow[];
+  predictiveRecords?: PredictiveMaintenanceRecord[];
+  reminders?: MaintenanceReminder[];
+  addEquipmentToCalendar?: (eq: Omit<EquipmentCalendarRow, 'id'>) => EquipmentCalendarRow;
+  updateCalendarCell?: (
+    equipmentId: string, 
+    weekNumber: number, 
+    cellType: 'planned' | 'realized', 
+    value: PlannedFrequencyCode | ExecutionStatusCode | ''
+  ) => void;
+  updateEquipmentDetails?: (id: string, partial: Partial<EquipmentCalendarRow>) => void;
+  deleteEquipmentFromCalendar?: (id: string) => void;
+  addPredictiveRecord?: (rec: Omit<PredictiveMaintenanceRecord, 'id'>) => PredictiveMaintenanceRecord;
+  deletePredictiveRecord?: (id: string) => void;
+  addReminder?: (rem: Omit<MaintenanceReminder, 'id'>) => MaintenanceReminder;
+  markReminderAttended?: (id: string) => void;
+  markReminderRead?: (id: string) => void;
+  deleteReminder?: (id: string) => void;
+
   transactions: Transaction[];
   purchaseOrders: PurchaseOrder[];
   settings: WorkshopSettings;
@@ -27,8 +54,8 @@ interface AdminDashboardProps {
   addTransaction: (t: Omit<Transaction, 'id' | 'date'>) => void;
   handleClientCreditPayment: (clientId: string, amount: number, method: 'Efectivo' | 'Tarjeta' | 'Transferencia') => void;
   resetDatabase: () => void;
-  activeTab?: 'metrics' | 'preventive' | 'mantenimiento' | 'finances' | 'personnel' | 'config';
-  setActiveTab?: (tab: 'metrics' | 'preventive' | 'mantenimiento' | 'finances' | 'personnel' | 'config') => void;
+  activeTab?: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config';
+  setActiveTab?: (tab: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config') => void;
 }
 
 export default function AdminDashboard({
@@ -42,6 +69,19 @@ export default function AdminDashboard({
   addMaintenanceOrder = () => ({} as any),
   updateMaintenanceOrder = () => {},
   deleteMaintenanceOrder = () => {},
+  calendarEquipment = [],
+  predictiveRecords = [],
+  reminders = [],
+  addEquipmentToCalendar = () => ({} as any),
+  updateCalendarCell = () => {},
+  updateEquipmentDetails = () => {},
+  deleteEquipmentFromCalendar = () => {},
+  addPredictiveRecord = () => ({} as any),
+  deletePredictiveRecord = () => {},
+  addReminder = () => ({} as any),
+  markReminderAttended = () => {},
+  markReminderRead = () => {},
+  deleteReminder = () => {},
   transactions,
   purchaseOrders,
   settings,
@@ -54,9 +94,10 @@ export default function AdminDashboard({
   activeTab: propActiveTab,
   setActiveTab: propSetActiveTab
 }: AdminDashboardProps) {
-  const [localTab, setLocalTab] = useState<'metrics' | 'preventive' | 'mantenimiento' | 'finances' | 'personnel' | 'config'>('metrics');
+  const [localTab, setLocalTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config'>('calendario_predic');
   const activeTab = propActiveTab || localTab;
   const setActiveTab = propSetActiveTab || setLocalTab;
+
   
   // Interactive Master Calendar states
   const [calendarView, setCalendarView] = useState<'month' | 'week' | 'day'>('month');
@@ -250,11 +291,10 @@ export default function AdminDashboard({
             onChange={(e) => setActiveTab(e.target.value as any)}
             className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FA5210]"
           >
-            <option value="mantenimiento">📋 Órdenes de Trabajo y Mantenimiento (MT0301F1)</option>
-            <option value="metrics">📈 KPIs y Analítica Avanzada</option>
-            <option value="preventive">📅 Planificación y Mantenimiento Preventivo</option>
-            <option value="finances">💵 Costos y Finanzas</option>
-            <option value="personnel">👥 Carga de Trabajo y Personal</option>
+            <option value="calendario_predic">📅 Calendario de Mantenimiento Predictivo (Mensual & Anual)</option>
+            <option value="recordatorios">🔔 Recordatorios y Alertas</option>
+            <option value="mantenimiento">📋 Órdenes de Trabajo MT0301F1</option>
+            <option value="personnel">👥 Personal u Operarios</option>
             <option value="config">⚙️ Configuración Maestra</option>
           </select>
         </div>
@@ -262,52 +302,45 @@ export default function AdminDashboard({
         {/* Desktop Horizontal Tabs Menu */}
         <div className="hidden lg:flex gap-2 flex-wrap">
           <button
-            id="tab-mantenimiento"
-            onClick={() => setActiveTab('mantenimiento')}
+            id="tab-calendario-predic"
+            onClick={() => setActiveTab('calendario_predic')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg transition-all ${
-              activeTab === 'mantenimiento'
+              activeTab === 'calendario_predic'
                 ? 'bg-[#FA5210] text-white shadow-md shadow-[#FA5210]/20 ring-2 ring-[#FA5210]/30'
                 : 'text-slate-700 bg-white border border-slate-200 hover:bg-slate-100'
             }`}
           >
-            <FileText size={16} />
-            Órdenes de Trabajo y Mantenimiento
-          </button>
-          <button
-            id="tab-metrics"
-            onClick={() => setActiveTab('metrics')}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === 'metrics'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-            }`}
-          >
-            <BarChart2 size={16} />
-            KPIs y Analítica
-          </button>
-          <button
-            id="tab-preventive"
-            onClick={() => setActiveTab('preventive')}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === 'preventive'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-            }`}
-          >
             <Calendar size={16} />
-            Planificación y Preventivo
+            Calendario Mantenimiento Predictivo (2026)
           </button>
           <button
-            id="tab-finances"
-            onClick={() => setActiveTab('finances')}
+            id="tab-recordatorios"
+            onClick={() => setActiveTab('recordatorios')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+              activeTab === 'recordatorios'
+                ? 'bg-[#FA5210] text-white shadow-md shadow-[#FA5210]/20 ring-2 ring-[#FA5210]/30'
+                : 'text-slate-700 bg-white border border-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            <Zap size={16} />
+            Recordatorios y Alertas
+            {reminders.filter(r => !r.attended).length > 0 && (
+              <span className="ml-1 bg-white text-red-600 px-1.5 py-0.2 rounded-full text-[10px] font-black shadow-sm">
+                {reminders.filter(r => !r.attended).length}
+              </span>
+            )}
+          </button>
+          <button
+            id="tab-mantenimiento"
+            onClick={() => setActiveTab('mantenimiento')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === 'finances'
+              activeTab === 'mantenimiento'
                 ? 'bg-slate-900 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
-            <DollarSign size={16} />
-            Costos y Finanzas
+            <FileText size={16} />
+            Órdenes de Trabajo MT0301F1
           </button>
           <button
             id="tab-personnel"
@@ -319,7 +352,7 @@ export default function AdminDashboard({
             }`}
           >
             <Users size={16} />
-            Carga de Trabajo
+            Personal
           </button>
           <button
             id="tab-config"
@@ -334,6 +367,7 @@ export default function AdminDashboard({
             Configuración
           </button>
         </div>
+
         
         <div className="flex items-center justify-between lg:justify-end gap-2 w-full lg:w-auto">
           <span className="text-xs text-slate-400 block lg:hidden font-medium">Panel General</span>
@@ -351,6 +385,34 @@ export default function AdminDashboard({
         </div>
       </div>
 
+      {/* PREDICTIVE CALENDAR TAB */}
+      {activeTab === 'calendario_predic' && (
+        <PredictiveCalendarModule
+          calendarEquipment={calendarEquipment}
+          predictiveRecords={predictiveRecords}
+          addEquipmentToCalendar={addEquipmentToCalendar}
+          updateCalendarCell={updateCalendarCell}
+          updateEquipmentDetails={updateEquipmentDetails}
+          deleteEquipmentFromCalendar={deleteEquipmentFromCalendar}
+          addPredictiveRecord={addPredictiveRecord}
+          deletePredictiveRecord={deletePredictiveRecord}
+          addReminder={addReminder}
+        />
+      )}
+
+      {/* REMINDERS & ALERTS TAB */}
+      {activeTab === 'recordatorios' && (
+        <RemindersModule
+          reminders={reminders}
+          addReminder={addReminder}
+          markReminderAttended={markReminderAttended}
+          markReminderRead={markReminderRead}
+          deleteReminder={deleteReminder}
+          addMaintenanceOrder={addMaintenanceOrder}
+          navigateToOT={() => setActiveTab('mantenimiento')}
+        />
+      )}
+
       {/* MAINTENANCE ORDERS TAB */}
       {activeTab === 'mantenimiento' && (
         <MaintenanceOrdersModule
@@ -360,6 +422,7 @@ export default function AdminDashboard({
           deleteMaintenanceOrder={deleteMaintenanceOrder}
         />
       )}
+
 
       {/* METRICS & KPIs TAB */}
       {activeTab === 'metrics' && (

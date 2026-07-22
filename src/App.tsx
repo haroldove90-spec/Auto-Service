@@ -32,6 +32,9 @@ export default function App() {
     requisitions,
     orders,
     maintenanceOrders,
+    calendarEquipment,
+    predictiveRecords,
+    reminders,
     transactions,
     settings,
     setSettings,
@@ -64,6 +67,17 @@ export default function App() {
     addMaintenanceOrder,
     updateMaintenanceOrder,
     deleteMaintenanceOrder,
+    addEquipmentToCalendar,
+    updateCalendarCell,
+    updateEquipmentDetails,
+    deleteEquipmentFromCalendar,
+    addPredictiveRecord,
+    updatePredictiveRecord,
+    deletePredictiveRecord,
+    addReminder,
+    markReminderAttended,
+    markReminderRead,
+    deleteReminder,
     resetDatabase
   } = useWorkshopState();
 
@@ -71,7 +85,8 @@ export default function App() {
   const [currentRole, setCurrentRole] = useState<UserRole>('admin');
 
   // Sub-modules tab states for synchronized bottom navigation
-  const [adminTab, setAdminTab] = useState<'mantenimiento' | 'metrics' | 'preventive' | 'finances' | 'personnel' | 'config'>('mantenimiento');
+  const [adminTab, setAdminTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config'>('calendario_predic');
+
   const [advisorTab, setAdvisorTab] = useState<'reception' | 'quotes' | 'agenda' | 'crm'>('reception');
   const [mechanicTab, setMechanicTab] = useState<'tasks' | 'diagnostics' | 'requisitions'>('tasks');
   const [warehouseTab, setWarehouseTab] = useState<'catalog' | 'requisitions' | 'purchases'>('catalog');
@@ -130,13 +145,13 @@ export default function App() {
     switch (currentRole) {
       case 'admin':
         return [
+          { id: 'calendario_predic', label: 'Calendario', icon: Calendar, onClick: () => setAdminTab('calendario_predic'), isActive: adminTab === 'calendario_predic' },
+          { id: 'recordatorios', label: 'Alertas', icon: BellRing, onClick: () => setAdminTab('recordatorios'), isActive: adminTab === 'recordatorios' },
           { id: 'mantenimiento', label: 'Órdenes OT', icon: FileText, onClick: () => setAdminTab('mantenimiento'), isActive: adminTab === 'mantenimiento' },
-          { id: 'metrics', label: 'KPIs', icon: TrendingUp, onClick: () => setAdminTab('metrics'), isActive: adminTab === 'metrics' },
-          { id: 'preventive', label: 'Preventivos', icon: Calendar, onClick: () => setAdminTab('preventive'), isActive: adminTab === 'preventive' },
-          { id: 'finances', label: 'Finanzas', icon: DollarSign, onClick: () => setAdminTab('finances'), isActive: adminTab === 'finances' },
           { id: 'personnel', label: 'Personal', icon: Users, onClick: () => setAdminTab('personnel'), isActive: adminTab === 'personnel' },
           { id: 'config', label: 'Ajustes', icon: Settings, onClick: () => setAdminTab('config'), isActive: adminTab === 'config' },
         ];
+
       case 'advisor':
         return [
           { id: 'reception', label: 'Recepc.', icon: Car, onClick: () => setAdvisorTab('reception'), isActive: advisorTab === 'reception' },
@@ -411,6 +426,19 @@ export default function App() {
                     addMaintenanceOrder={addMaintenanceOrder}
                     updateMaintenanceOrder={updateMaintenanceOrder}
                     deleteMaintenanceOrder={deleteMaintenanceOrder}
+                    calendarEquipment={calendarEquipment}
+                    predictiveRecords={predictiveRecords}
+                    reminders={reminders}
+                    addEquipmentToCalendar={addEquipmentToCalendar}
+                    updateCalendarCell={updateCalendarCell}
+                    updateEquipmentDetails={updateEquipmentDetails}
+                    deleteEquipmentFromCalendar={deleteEquipmentFromCalendar}
+                    addPredictiveRecord={addPredictiveRecord}
+                    deletePredictiveRecord={deletePredictiveRecord}
+                    addReminder={addReminder}
+                    markReminderAttended={markReminderAttended}
+                    markReminderRead={markReminderRead}
+                    deleteReminder={deleteReminder}
                     transactions={transactions}
                     purchaseOrders={purchaseOrders}
                     settings={settings}
@@ -424,6 +452,7 @@ export default function App() {
                     setActiveTab={setAdminTab}
                   />
                 )}
+
 
                 {currentRole === 'advisor' && (
                   <AdvisorDashboard
