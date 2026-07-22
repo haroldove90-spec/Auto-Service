@@ -285,31 +285,50 @@ export default function App() {
                 referrerPolicy="no-referrer"
               />
 
-              {/* Grid of access icons with name (No description, strictly requested) */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 w-full max-w-5xl">
+              {/* Grid of access icons with name (Admin active, others disabled) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 w-full max-w-5xl">
                 {[
-                  { id: 'admin', name: 'Gerente: Alejandro Castellanos', icon: Shield },
-                  { id: 'advisor', name: 'Asesor / Recepción', icon: User },
-                  { id: 'mechanic', name: 'Técnico de Mantenimiento (7 Operarios)', icon: Wrench },
-                  { id: 'warehouse', name: 'Almacenista / Auxiliar de Control', icon: Package },
-                  { id: 'client', name: 'Portal del Cliente', icon: Car }
+                  { id: 'admin', name: 'Gerente: Alejandro Castellanos', icon: Shield, enabled: true },
+                  { id: 'advisor', name: 'Asesor / Recepción', icon: User, enabled: false },
+                  { id: 'mechanic', name: 'Técnico de Mantenimiento (7 Operarios)', icon: Wrench, enabled: false },
+                  { id: 'warehouse', name: 'Almacenista / Auxiliar de Control', icon: Package, enabled: false },
+                  { id: 'client', name: 'Portal del Cliente', icon: Car, enabled: false }
                 ].map((roleItem) => {
                   const IconComponent = roleItem.icon;
+                  const isEnabled = roleItem.enabled;
                   return (
                     <motion.button
                       key={roleItem.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={isEnabled ? { scale: 1.05 } : {}}
+                      whileTap={isEnabled ? { scale: 0.95 } : {}}
+                      disabled={!isEnabled}
                       onClick={() => {
-                        setCurrentRole(roleItem.id as UserRole);
-                        setShowLanding(false);
+                        if (isEnabled) {
+                          setCurrentRole(roleItem.id as UserRole);
+                          setShowLanding(false);
+                        }
                       }}
-                      className="role-card flex flex-col items-center justify-center p-4 sm:p-6 bg-white rounded-2xl border border-slate-200 cursor-pointer transition-all aspect-square text-center shadow-sm hover:shadow-md"
+                      className={`role-card relative flex flex-col items-center justify-between p-4 sm:p-5 rounded-2xl border transition-all aspect-square text-center shadow-sm ${
+                        isEnabled 
+                          ? 'bg-white border-[#FA5210] ring-2 ring-[#FA5210]/20 shadow-md cursor-pointer hover:shadow-lg' 
+                          : 'bg-slate-50/80 border-slate-200 opacity-60 cursor-not-allowed'
+                      }`}
                     >
-                      <div className="p-3 sm:p-4 bg-[#FA5210]/10 text-[#FA5210] rounded-full mb-2 sm:mb-4 border border-[#FA5210]/20 flex items-center justify-center">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                        isEnabled ? 'bg-[#FA5210] text-white' : 'bg-slate-200 text-slate-500'
+                      }`}>
+                        {isEnabled ? 'Activo' : 'Desactivado'}
+                      </span>
+
+                      <div className={`p-3 sm:p-4 rounded-full my-1 border flex items-center justify-center ${
+                        isEnabled ? 'bg-[#FA5210]/10 text-[#FA5210] border-[#FA5210]/20' : 'bg-slate-200/50 text-slate-400 border-slate-300/50'
+                      }`}>
                         <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 stroke-[1.8]" />
                       </div>
-                      <span className="font-bold text-xs sm:text-sm tracking-tight text-slate-800">{roleItem.name}</span>
+
+                      <span className={`font-bold text-xs sm:text-sm tracking-tight ${isEnabled ? 'text-slate-900' : 'text-slate-500'}`}>
+                        {roleItem.name}
+                      </span>
                     </motion.button>
                   );
                 })}
