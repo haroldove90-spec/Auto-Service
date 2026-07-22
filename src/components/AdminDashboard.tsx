@@ -61,8 +61,8 @@ interface AdminDashboardProps {
   addTransaction: (t: Omit<Transaction, 'id' | 'date'>) => void;
   handleClientCreditPayment: (clientId: string, amount: number, method: 'Efectivo' | 'Tarjeta' | 'Transferencia') => void;
   resetDatabase: () => void;
-  activeTab?: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config';
-  setActiveTab?: (tab: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config') => void;
+  activeTab?: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes';
+  setActiveTab?: (tab: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes') => void;
 }
 
 export default function AdminDashboard({
@@ -105,7 +105,7 @@ export default function AdminDashboard({
   activeTab: propActiveTab,
   setActiveTab: propSetActiveTab
 }: AdminDashboardProps) {
-  const [localTab, setLocalTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config'>('calendario_predic');
+  const [localTab, setLocalTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes'>('calendario_predic');
   const activeTab = propActiveTab || localTab;
   const setActiveTab = propSetActiveTab || setLocalTab;
 
@@ -306,8 +306,6 @@ export default function AdminDashboard({
             <option value="recordatorios">🔔 Recordatorios y Alertas</option>
             <option value="historial_ordenes">📊 Historial Órdenes de Mantenimiento (Archivo 2025/2026)</option>
             <option value="mantenimiento">📋 Órdenes de Trabajo MT0301F1</option>
-            <option value="personnel">👥 Personal u Operarios</option>
-            <option value="config">⚙️ Configuración Maestra</option>
           </select>
         </div>
 
@@ -365,30 +363,6 @@ export default function AdminDashboard({
           >
             <Layers size={16} />
             Historial Órdenes Mantenimiento
-          </button>
-          <button
-            id="tab-personnel"
-            onClick={() => setActiveTab('personnel')}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === 'personnel'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-            }`}
-          >
-            <Users size={16} />
-            Personal
-          </button>
-          <button
-            id="tab-config"
-            onClick={() => setActiveTab('config')}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === 'config'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-            }`}
-          >
-            <Settings size={16} />
-            Configuración
           </button>
         </div>
 

@@ -89,7 +89,7 @@ export default function App() {
   const [currentRole, setCurrentRole] = useState<UserRole>('admin');
 
   // Sub-modules tab states for synchronized bottom navigation
-  const [adminTab, setAdminTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config'>('calendario_predic');
+  const [adminTab, setAdminTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes'>('calendario_predic');
 
   const [advisorTab, setAdvisorTab] = useState<'reception' | 'quotes' | 'agenda' | 'crm'>('reception');
   const [mechanicTab, setMechanicTab] = useState<'tasks' | 'diagnostics' | 'requisitions'>('tasks');
@@ -153,8 +153,6 @@ export default function App() {
           { id: 'recordatorios', label: 'Alertas', icon: BellRing, onClick: () => setAdminTab('recordatorios'), isActive: adminTab === 'recordatorios' },
           { id: 'historial_ordenes', label: 'Historial', icon: Layers, onClick: () => setAdminTab('historial_ordenes'), isActive: adminTab === 'historial_ordenes' },
           { id: 'mantenimiento', label: 'Órdenes OT', icon: FileText, onClick: () => setAdminTab('mantenimiento'), isActive: adminTab === 'mantenimiento' },
-          { id: 'personnel', label: 'Personal', icon: Users, onClick: () => setAdminTab('personnel'), isActive: adminTab === 'personnel' },
-          { id: 'config', label: 'Ajustes', icon: Settings, onClick: () => setAdminTab('config'), isActive: adminTab === 'config' },
         ];
 
       case 'advisor':
