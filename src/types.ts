@@ -161,3 +161,39 @@ export interface WorkshopSettings {
   taxRate: number; // e.g. 16 for 16% (IVA México)
   bankDetails: string;
 }
+
+export type MaintenanceServiceType = 'CORRECTIVO' | 'PREVENTIVO' | 'CAMBIO HTA SET-UP' | 'INSTALACION NUEVA' | 'MODIFICACION' | 'CFF' | 'OTROS ESPECIFIQUE';
+
+export interface MaintenanceOrder {
+  id: string; // mto-7050
+  folio: number; // 7050
+  status: 'Pendiente' | 'En_Proceso' | 'Completado' | 'Cancelado';
+  documentCode: string; // MT0301F1
+  revision: string; // Rev. 01
+  createdBy: string; // A. Castellanos
+  lastUpdate: string; // 24-Oct-2025
+  
+  // Section 1: PARA SER LLENADA POR EL AREA QUE REQUIERE EL SERVICIO
+  solicitante: string;
+  area: string;
+  fechaSolicitud: string;
+  nombreEquipo: string;
+  proyecto: string;
+  horaInicial: string;
+  tipoServicio: MaintenanceServiceType;
+  tipoServicioOtros?: string;
+  tipoAjuste: string;
+  descripcionFalla: string;
+
+  // Section 2: PARA SER LLENADA POR MANTENIMIENTO
+  ordenAtendidaPor: string;
+  fechaMantenimiento: string;
+  horaFinal: string;
+  recibeProduccionFirmaHora: string;
+  recibeCalidadFirmaHora: string;
+  refaccionesUtilizadas: string;
+  numeroNAV: string;
+  descripcionServicioEfectuado: string;
+  tipoFalla: string[]; // ['ELECTRICA', 'MECANICA', etc.]
+}
+

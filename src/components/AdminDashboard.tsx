@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { 
   TrendingUp, DollarSign, Briefcase, FileText, Settings, Users, AlertTriangle, 
   Plus, Search, Download, Trash, Check, X, Shield, RefreshCw, Layers, Award,
-  Calendar, Clock, Activity, CheckSquare, Zap, BarChart2
+  Calendar, Clock, Activity, CheckSquare, Zap, BarChart2, Wrench
 } from 'lucide-react';
-import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PurchaseOrder } from '../types';
+import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PurchaseOrder, MaintenanceOrder } from '../types';
+import MaintenanceOrdersModule from './MaintenanceOrdersModule';
 
 interface AdminDashboardProps {
   clients: Client[];
@@ -13,6 +14,10 @@ interface AdminDashboardProps {
   inventory: InventoryItem[];
   suppliers: Supplier[];
   orders: ServiceOrder[];
+  maintenanceOrders?: MaintenanceOrder[];
+  addMaintenanceOrder?: (order: Omit<MaintenanceOrder, 'id' | 'folio'>) => MaintenanceOrder;
+  updateMaintenanceOrder?: (id: string, order: Partial<MaintenanceOrder>) => void;
+  deleteMaintenanceOrder?: (id: string) => void;
   transactions: Transaction[];
   purchaseOrders: PurchaseOrder[];
   settings: WorkshopSettings;
@@ -22,8 +27,8 @@ interface AdminDashboardProps {
   addTransaction: (t: Omit<Transaction, 'id' | 'date'>) => void;
   handleClientCreditPayment: (clientId: string, amount: number, method: 'Efectivo' | 'Tarjeta' | 'Transferencia') => void;
   resetDatabase: () => void;
-  activeTab?: 'metrics' | 'preventive' | 'finances' | 'personnel' | 'config';
-  setActiveTab?: (tab: 'metrics' | 'preventive' | 'finances' | 'personnel' | 'config') => void;
+  activeTab?: 'metrics' | 'preventive' | 'mantenimiento' | 'finances' | 'personnel' | 'config';
+  setActiveTab?: (tab: 'metrics' | 'preventive' | 'mantenimiento' | 'finances' | 'personnel' | 'config') => void;
 }
 
 export default function AdminDashboard({
@@ -33,6 +38,10 @@ export default function AdminDashboard({
   inventory,
   suppliers,
   orders,
+  maintenanceOrders = [],
+  addMaintenanceOrder = () => ({} as any),
+  updateMaintenanceOrder = () => {},
+  deleteMaintenanceOrder = () => {},
   transactions,
   purchaseOrders,
   settings,
@@ -45,7 +54,7 @@ export default function AdminDashboard({
   activeTab: propActiveTab,
   setActiveTab: propSetActiveTab
 }: AdminDashboardProps) {
-  const [localTab, setLocalTab] = useState<'metrics' | 'preventive' | 'finances' | 'personnel' | 'config'>('metrics');
+  const [localTab, setLocalTab] = useState<'metrics' | 'preventive' | 'mantenimiento' | 'finances' | 'personnel' | 'config'>('metrics');
   const activeTab = propActiveTab || localTab;
   const setActiveTab = propSetActiveTab || setLocalTab;
   
@@ -238,9 +247,10 @@ export default function AdminDashboard({
           <select
             id="admin-mobile-tab-select"
             value={activeTab}
-            onChange={(e) => setActiveTab(e.target.value as 'metrics' | 'preventive' | 'finances' | 'personnel' | 'config')}
-            className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#8D6A28]"
+            onChange={(e) => setActiveTab(e.target.value as any)}
+            className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FA5210]"
           >
+            <option value="mantenimiento">📋 Órdenes de Trabajo y Mantenimiento (MT0301F1)</option>
             <option value="metrics">📈 KPIs y Analítica Avanzada</option>
             <option value="preventive">📅 Planificación y Mantenimiento Preventivo</option>
             <option value="finances">💵 Costos y Finanzas</option>
@@ -250,13 +260,25 @@ export default function AdminDashboard({
         </div>
 
         {/* Desktop Horizontal Tabs Menu */}
-        <div className="hidden lg:flex gap-2">
+        <div className="hidden lg:flex gap-2 flex-wrap">
+          <button
+            id="tab-mantenimiento"
+            onClick={() => setActiveTab('mantenimiento')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+              activeTab === 'mantenimiento'
+                ? 'bg-[#FA5210] text-white shadow-md shadow-[#FA5210]/20 ring-2 ring-[#FA5210]/30'
+                : 'text-slate-700 bg-white border border-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            <FileText size={16} />
+            Órdenes de Trabajo y Mantenimiento
+          </button>
           <button
             id="tab-metrics"
             onClick={() => setActiveTab('metrics')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
               activeTab === 'metrics'
-                ? 'bg-[#8D6A28] text-white shadow-md'
+                ? 'bg-slate-900 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
@@ -268,7 +290,7 @@ export default function AdminDashboard({
             onClick={() => setActiveTab('preventive')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
               activeTab === 'preventive'
-                ? 'bg-[#8D6A28] text-white shadow-md'
+                ? 'bg-slate-900 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
@@ -280,7 +302,7 @@ export default function AdminDashboard({
             onClick={() => setActiveTab('finances')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
               activeTab === 'finances'
-                ? 'bg-[#8D6A28] text-white shadow-md'
+                ? 'bg-slate-900 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
@@ -292,7 +314,7 @@ export default function AdminDashboard({
             onClick={() => setActiveTab('personnel')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
               activeTab === 'personnel'
-                ? 'bg-[#8D6A28] text-white shadow-md'
+                ? 'bg-slate-900 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
@@ -304,7 +326,7 @@ export default function AdminDashboard({
             onClick={() => setActiveTab('config')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
               activeTab === 'config'
-                ? 'bg-[#8D6A28] text-white shadow-md'
+                ? 'bg-slate-900 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
@@ -328,6 +350,16 @@ export default function AdminDashboard({
           </button>
         </div>
       </div>
+
+      {/* MAINTENANCE ORDERS TAB */}
+      {activeTab === 'mantenimiento' && (
+        <MaintenanceOrdersModule
+          maintenanceOrders={maintenanceOrders}
+          addMaintenanceOrder={addMaintenanceOrder}
+          updateMaintenanceOrder={updateMaintenanceOrder}
+          deleteMaintenanceOrder={deleteMaintenanceOrder}
+        />
+      )}
 
       {/* METRICS & KPIs TAB */}
       {activeTab === 'metrics' && (

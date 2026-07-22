@@ -31,6 +31,7 @@ export default function App() {
     purchaseOrders,
     requisitions,
     orders,
+    maintenanceOrders,
     transactions,
     settings,
     setSettings,
@@ -60,6 +61,9 @@ export default function App() {
     registerOrderPayment,
     handleClientCreditPayment,
     addSupplier,
+    addMaintenanceOrder,
+    updateMaintenanceOrder,
+    deleteMaintenanceOrder,
     resetDatabase
   } = useWorkshopState();
 
@@ -67,7 +71,7 @@ export default function App() {
   const [currentRole, setCurrentRole] = useState<UserRole>('admin');
 
   // Sub-modules tab states for synchronized bottom navigation
-  const [adminTab, setAdminTab] = useState<'metrics' | 'preventive' | 'finances' | 'personnel' | 'config'>('metrics');
+  const [adminTab, setAdminTab] = useState<'mantenimiento' | 'metrics' | 'preventive' | 'finances' | 'personnel' | 'config'>('mantenimiento');
   const [advisorTab, setAdvisorTab] = useState<'reception' | 'quotes' | 'agenda' | 'crm'>('reception');
   const [mechanicTab, setMechanicTab] = useState<'tasks' | 'diagnostics' | 'requisitions'>('tasks');
   const [warehouseTab, setWarehouseTab] = useState<'catalog' | 'requisitions' | 'purchases'>('catalog');
@@ -126,6 +130,7 @@ export default function App() {
     switch (currentRole) {
       case 'admin':
         return [
+          { id: 'mantenimiento', label: 'Órdenes OT', icon: FileText, onClick: () => setAdminTab('mantenimiento'), isActive: adminTab === 'mantenimiento' },
           { id: 'metrics', label: 'KPIs', icon: TrendingUp, onClick: () => setAdminTab('metrics'), isActive: adminTab === 'metrics' },
           { id: 'preventive', label: 'Preventivos', icon: Calendar, onClick: () => setAdminTab('preventive'), isActive: adminTab === 'preventive' },
           { id: 'finances', label: 'Finanzas', icon: DollarSign, onClick: () => setAdminTab('finances'), isActive: adminTab === 'finances' },
@@ -402,6 +407,10 @@ export default function App() {
                     inventory={inventory}
                     suppliers={suppliers}
                     orders={orders}
+                    maintenanceOrders={maintenanceOrders}
+                    addMaintenanceOrder={addMaintenanceOrder}
+                    updateMaintenanceOrder={updateMaintenanceOrder}
+                    deleteMaintenanceOrder={deleteMaintenanceOrder}
                     transactions={transactions}
                     purchaseOrders={purchaseOrders}
                     settings={settings}

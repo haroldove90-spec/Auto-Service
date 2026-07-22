@@ -1,4 +1,4 @@
-import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder } from './types';
+import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, MaintenanceOrder } from './types';
 
 export const INITIAL_CLIENTS: Client[] = [
   {
@@ -649,3 +649,61 @@ export const INITIAL_SETTINGS: WorkshopSettings = {
   taxRate: 16, // IVA 16% México
   bankDetails: 'Banco BBVA Bancomer • Beneficiario: T+H Automotive S.A. de C.V. • Cuenta: 0123 4567 8901 • CLABE: 0121 8000 1234 5678 90'
 };
+
+export const INITIAL_MAINTENANCE_ORDERS: MaintenanceOrder[] = [
+  {
+    id: 'mto-7050',
+    folio: 7050,
+    status: 'En_Proceso',
+    documentCode: 'MT0301F1',
+    revision: 'Rev. 01',
+    createdBy: 'A. Castellanos',
+    lastUpdate: '24-Oct-2025',
+    solicitante: 'Juan Pérez / Ing. Producción',
+    area: 'Área de Prensas / Ensamble',
+    fechaSolicitud: '2026-07-22',
+    nombreEquipo: 'Prensa Hidráulica H-500',
+    proyecto: 'Proyecto Chasis T+H',
+    horaInicial: '08:30',
+    tipoServicio: 'CORRECTIVO',
+    tipoAjuste: 'Ajuste de válvulas de presión y rectificación de fuga',
+    descripcionFalla: 'Fuga de fluido hidráulico en electroválvula principal YV-02 y sobrecalentamiento del bloque manifold.',
+    ordenAtendidaPor: 'A. Castellanos / T. Mantenimiento',
+    fechaMantenimiento: '2026-07-22',
+    horaFinal: '11:45',
+    recibeProduccionFirmaHora: 'Ing. R. Gómez (11:50 hrs)',
+    recibeCalidadFirmaHora: 'Lic. M. Torres (12:00 hrs)',
+    refaccionesUtilizadas: '1x Empaque O-Ring NBR 90, 2 Lts Aceite Hidráulico ISO VG 68',
+    numeroNAV: 'NAV-88402',
+    descripcionServicioEfectuado: 'Se reemplazó empaque O-Ring dañado, se reapretaron conectores y se rellenó fluido hidráulico a nivel de trabajo.',
+    tipoFalla: ['HIDRAULICA', 'MECANICA']
+  },
+  {
+    id: 'mto-7051',
+    folio: 7051,
+    status: 'Completado',
+    documentCode: 'MT0301F1',
+    revision: 'Rev. 01',
+    createdBy: 'A. Castellanos',
+    lastUpdate: '24-Oct-2025',
+    solicitante: 'Miguel Ángel Vázquez',
+    area: 'Línea de Ensamble B',
+    fechaSolicitud: '2026-07-20',
+    nombreEquipo: 'Torno CNC Haas ST-20',
+    proyecto: 'Ejes Automotrices',
+    horaInicial: '07:00',
+    tipoServicio: 'PREVENTIVO',
+    tipoAjuste: 'Limpieza de filtros y calibración de torreta',
+    descripcionFalla: 'Mantenimiento preventivo programado de 500 horas de operación.',
+    ordenAtendidaPor: 'A. Castellanos',
+    fechaMantenimiento: '2026-07-20',
+    horaFinal: '10:00',
+    recibeProduccionFirmaHora: 'M. Vázquez (10:05 hrs)',
+    recibeCalidadFirmaHora: 'Ing. C. Ruiz (10:15 hrs)',
+    refaccionesUtilizadas: 'Filtro de refrigerante sintético, Grasa sintética Mobil EP2',
+    numeroNAV: 'NAV-91023',
+    descripcionServicioEfectuado: 'Se realizó cambio de filtros de refrigerante, engrase general de guías y alineación del chuck.',
+    tipoFalla: ['MECANICA', 'TERMINÓ EL PLAN DE PRODUCCIÓN']
+  }
+];
+

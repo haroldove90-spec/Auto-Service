@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, OrderStatus, BudgetLineItem, TimeLog } from './types';
+import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, OrderStatus, BudgetLineItem, TimeLog, MaintenanceOrder } from './types';
 import { 
   INITIAL_CLIENTS, 
   INITIAL_VEHICLES, 
@@ -10,7 +10,8 @@ import {
   INITIAL_REQUISITIONS, 
   INITIAL_ORDERS, 
   INITIAL_TRANSACTIONS, 
-  INITIAL_SETTINGS 
+  INITIAL_SETTINGS,
+  INITIAL_MAINTENANCE_ORDERS
 } from './mockData';
 
 export function useWorkshopState() {
@@ -22,6 +23,7 @@ export function useWorkshopState() {
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
   const [requisitions, setRequisitions] = useState<PartRequisition[]>([]);
   const [orders, setOrders] = useState<ServiceOrder[]>([]);
+  const [maintenanceOrders, setMaintenanceOrders] = useState<MaintenanceOrder[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [settings, setSettings] = useState<WorkshopSettings>(INITIAL_SETTINGS);
   const [loaded, setLoaded] = useState(false);
@@ -36,6 +38,7 @@ export function useWorkshopState() {
     const localPurchaseOrders = localStorage.getItem('wt_purchase_orders');
     const localRequisitions = localStorage.getItem('wt_requisitions');
     const localOrders = localStorage.getItem('wt_orders');
+    const localMaintenanceOrders = localStorage.getItem('wt_mto_orders');
     const localTransactions = localStorage.getItem('wt_transactions');
     const localSettings = localStorage.getItem('wt_settings');
 
@@ -47,6 +50,7 @@ export function useWorkshopState() {
     setPurchaseOrders(localPurchaseOrders ? JSON.parse(localPurchaseOrders) : INITIAL_PURCHASE_ORDERS);
     setRequisitions(localRequisitions ? JSON.parse(localRequisitions) : INITIAL_REQUISITIONS);
     setOrders(localOrders ? JSON.parse(localOrders) : INITIAL_ORDERS);
+    setMaintenanceOrders(localMaintenanceOrders ? JSON.parse(localMaintenanceOrders) : INITIAL_MAINTENANCE_ORDERS);
     setTransactions(localTransactions ? JSON.parse(localTransactions) : INITIAL_TRANSACTIONS);
     let parsedSettings = localSettings ? JSON.parse(localSettings) : INITIAL_SETTINGS;
     if (parsedSettings && parsedSettings.address && (parsedSettings.address.includes('Palmas') || parsedSettings.address.includes('palmas'))) {
@@ -97,6 +101,12 @@ export function useWorkshopState() {
     if (!loaded) return;
     localStorage.setItem('wt_orders', JSON.stringify(orders));
   }, [orders, loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem('wt_mto_orders', JSON.stringify(maintenanceOrders));
+  }, [maintenanceOrders, loaded]);
+
 
   useEffect(() => {
     if (!loaded) return;
@@ -521,6 +531,27 @@ export function useWorkshopState() {
     setSuppliers(prev => [...prev, newSupplier]);
   };
 
+  // 10. Maintenance Orders (MTO) CRUD
+  const addMaintenanceOrder = (newOrderData: Omit<MaintenanceOrder, 'id' | 'folio'>) => {
+    const maxFolio = maintenanceOrders.reduce((max, o) => (o.folio > max ? o.folio : max), 7049);
+    const nextFolio = maxFolio + 1;
+    const newMtoOrder: MaintenanceOrder = {
+      ...newOrderData,
+      id: `mto-${nextFolio}`,
+      folio: nextFolio
+    };
+    setMaintenanceOrders(prev => [newMtoOrder, ...prev]);
+    return newMtoOrder;
+  };
+
+  const updateMaintenanceOrder = (id: string, updatedData: Partial<MaintenanceOrder>) => {
+    setMaintenanceOrders(prev => prev.map(o => o.id === id ? { ...o, ...updatedData } : o));
+  };
+
+  const deleteMaintenanceOrder = (id: string) => {
+    setMaintenanceOrders(prev => prev.filter(o => o.id !== id));
+  };
+
   // Reset database to initial values
   const resetDatabase = () => {
     setClients(INITIAL_CLIENTS);
@@ -531,6 +562,7 @@ export function useWorkshopState() {
     setPurchaseOrders(INITIAL_PURCHASE_ORDERS);
     setRequisitions(INITIAL_REQUISITIONS);
     setOrders(INITIAL_ORDERS);
+    setMaintenanceOrders(INITIAL_MAINTENANCE_ORDERS);
     setTransactions(INITIAL_TRANSACTIONS);
     setSettings(INITIAL_SETTINGS);
     
@@ -542,6 +574,7 @@ export function useWorkshopState() {
     localStorage.setItem('wt_purchase_orders', JSON.stringify(INITIAL_PURCHASE_ORDERS));
     localStorage.setItem('wt_requisitions', JSON.stringify(INITIAL_REQUISITIONS));
     localStorage.setItem('wt_orders', JSON.stringify(INITIAL_ORDERS));
+    localStorage.setItem('wt_mto_orders', JSON.stringify(INITIAL_MAINTENANCE_ORDERS));
     localStorage.setItem('wt_transactions', JSON.stringify(INITIAL_TRANSACTIONS));
     localStorage.setItem('wt_settings', JSON.stringify(INITIAL_SETTINGS));
   };
@@ -555,6 +588,7 @@ export function useWorkshopState() {
     purchaseOrders,
     requisitions,
     orders,
+    maintenanceOrders,
     transactions,
     settings,
     setSettings,
@@ -584,6 +618,10 @@ export function useWorkshopState() {
     registerOrderPayment,
     handleClientCreditPayment,
     addSupplier,
+    addMaintenanceOrder,
+    updateMaintenanceOrder,
+    deleteMaintenanceOrder,
     resetDatabase
   };
+
 }
