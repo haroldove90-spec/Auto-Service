@@ -186,7 +186,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-slate-100 font-sans text-slate-800 flex flex-col selection:bg-amber-600 selection:text-white ${!showLanding ? 'pb-24' : ''}`}>
+    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-black font-sans text-slate-800 flex flex-col selection:bg-amber-600 selection:text-white ${!showLanding ? 'pb-24' : ''}`}>
       
       {/* WORKSHOP MAIN LOGO HEADER - Shown only when a role dashboard is active */}
       {!showLanding && (

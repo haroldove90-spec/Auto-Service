@@ -6,9 +6,9 @@
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Custom Color Palette aligned with user request: #0D0D0D, #FA5210, #A5A3B1, #DAD8E3 */
-  --color-slate-50: rgba(255, 255, 255, 0.02);
-  --color-slate-100: #0D0D0D;
+  /* Custom Color Palette aligned with user request: #000000 Absolute Black, #FA5210, #A5A3B1, #DAD8E3 */
+  --color-slate-50: #000000;
+  --color-slate-100: #000000;
   --color-slate-200: rgba(165, 163, 177, 0.12);
   --color-slate-300: rgba(165, 163, 177, 0.25);
   --color-slate-400: #DAD8E3;
@@ -16,21 +16,23 @@
   --color-slate-600: #A5A3B1;
   --color-slate-700: #DAD8E3;
   --color-slate-800: #DAD8E3;
-  --color-slate-900: #0D0D0D;
+  --color-slate-900: #000000;
 }
 
-/* Base Body Styles - Immersive `#0D0D0D` background with a subtle orange ambient radial glow at the top */
-html, body {
+/* Base Body Styles - Absolute Black #000000 background */
+html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden !important;
+  background-color: #000000 !important;
+  background-image: none !important;
 }
 
 body {
-  background-color: #0D0D0D !important;
-  background-image: radial-gradient(circle at 50% 0%, #301408 0%, #0D0D0D 75%) !important;
+  background-color: #000000 !important;
+  background-image: none !important;
   color: #DAD8E3 !important;
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
@@ -38,7 +40,7 @@ body {
 
 /* Master background override for slate-100 container */
 .bg-slate-100 {
-  background-color: transparent !important;
+  background-color: #000000 !important;
 }
 
 /* Premium Semi-Transparent Glass Surfaces (Panels/Cards) with thin borders */
