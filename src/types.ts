@@ -243,4 +243,29 @@ export interface MaintenanceReminder {
   createdAt: string;
 }
 
+export interface HistoricalMaintenanceOrder {
+  id: string;
+  folio: number; // e.g. 2798
+  fechaSolicitud: string; // e.g. "20-Dec"
+  horaSolicitada: string; // e.g. "22:30"
+  mes: string; // e.g. "12-Dec"
+  cw: number; // Calendar Week, e.g. 1
+  fechaSolicitudCompleta: string; // e.g. "12/20/24 10:30 PM"
+  solicitante: string; // e.g. "Carina L"
+  equipo: string; // e.g. "Dobladora"
+  centroDeCostos: string; // e.g. "5208"
+  tipoMantenimiento: string; // e.g. "Cambio htta."
+  tecnico1: string; // e.g. "Ruben Diaz"
+  tecnico2?: string; // e.g. "Ivan Diaz"
+  fechaCierre: string; // e.g. "20-Dec"
+  horaCierre: string; // e.g. "0:00"
+  fechaCierreCompleta: string; // e.g. "12/21/2024"
+  tiempoRequeridoMin: number; // e.g. 90.00
+  tipoFalla: string; // e.g. "DT-01 (CAMBIO HTTA.)"
+  tipoServicio: string; // e.g. "Set-Up", "Correctivo"
+  correctivo: string; // e.g. "Set-Up", "Limpieza estaciones"
+  nav?: string; // e.g. "21147 (4x)"
+  descripcionServicio: string; // e.g. "Se hizo cambio de herramientas..."
+}
+
 

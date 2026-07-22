@@ -572,26 +572,26 @@ export default function PredictiveCalendarModule({
           </div>
 
           {/* NOTES FOOTER SECTION MATCHING IMAGE */}
-          <div className="p-4 bg-amber-50/80 border border-amber-200/80 rounded-2xl text-xs space-y-2 text-slate-800">
-            <div className="font-extrabold text-amber-900 flex items-center gap-2">
-              <Info size={16} className="text-amber-600" />
+          <div className="p-5 bg-amber-100/90 border border-amber-300 rounded-2xl text-xs space-y-3 text-slate-950 shadow-sm">
+            <div className="font-black text-amber-950 text-sm flex items-center gap-2 border-b border-amber-200/80 pb-2">
+              <Info size={18} className="text-amber-800" />
               NOTAS Y REGLAS OPERATIVAS DEL CALENDARIO:
             </div>
-            <ol className="list-decimal list-inside space-y-1 font-medium text-slate-700">
+            <ol className="list-decimal list-inside space-y-2 font-semibold text-slate-900 leading-relaxed">
               <li>
-                <strong>Para los mantenimientos preventivos con frecuencia MENSUAL:</strong> la semana es solamente referencia ya que se realiza conforme a disponibilidad del equipo siempre y cuando se realice dentro del mismo mes.
+                <strong className="text-slate-950 font-extrabold">Para los mantenimientos preventivos con frecuencia MENSUAL:</strong> la semana es solamente referencia ya que se realiza conforme a disponibilidad del equipo siempre y cuando se realice dentro del mismo mes.
               </li>
               <li>
-                <strong>Para los mantenimientos preventivos con frecuencia BIMESTRAL:</strong> se valida con producción para que se pueda realizar conforme a la disponibilidad del equipo siempre y cuando se realice dentro del mismo tiempo de los 2 meses.
+                <strong className="text-slate-950 font-extrabold">Para los mantenimientos preventivos con frecuencia BIMESTRAL:</strong> se valida con producción para que se pueda realizar conforme a la disponibilidad del equipo siempre y cuando se realice dentro del mismo tiempo de los 2 meses.
               </li>
               <li>
-                <strong>Los mantenimientos preventivos con frecuencia ANUAL:</strong> son planeados a realizarse en la última semana del año aunque pudiera realizarse antes de acuerdo a disponibilidad, siempre y cuando la frecuencia no exceda 12 meses.
+                <strong className="text-slate-950 font-extrabold">Los mantenimientos preventivos con frecuencia ANUAL:</strong> son planeados a realizarse en la última semana del año aunque pudiera realizarse antes de acuerdo a disponibilidad, siempre y cuando la frecuencia no exceda 12 meses.
               </li>
               <li>
-                <strong>Los mantenimientos preventivos a los troqueles y herramientas de doblez:</strong> se realiza de forma MENSUAL, en caso de que no se hayan utilizado durante el mes solamente se realiza limpieza.
+                <strong className="text-slate-950 font-extrabold">Los mantenimientos preventivos a los troqueles y herramientas de doblez:</strong> se realiza de forma MENSUAL, en caso de que no se hayan utilizado durante el mes solamente se realiza limpieza.
               </li>
             </ol>
-            <div className="pt-2 text-[10px] text-slate-500 font-mono flex items-center justify-between border-t border-amber-200/50 mt-2">
+            <div className="pt-2 text-[11px] text-slate-700 font-bold flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-amber-300/80 mt-2 gap-1">
               <span>Last Update: 3-Sept-2025 • Updated by: Alejandro Castellanos</span>
               <span>Documento Oficial T+H Automotive • Versión 2026</span>
             </div>

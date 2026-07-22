@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, OrderStatus, BudgetLineItem, TimeLog, MaintenanceOrder, EquipmentCalendarRow, PredictiveMaintenanceRecord, MaintenanceReminder, PlannedFrequencyCode, ExecutionStatusCode } from './types';
+import { Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, WorkshopSettings, PartRequisition, PurchaseOrder, OrderStatus, BudgetLineItem, TimeLog, MaintenanceOrder, EquipmentCalendarRow, PredictiveMaintenanceRecord, MaintenanceReminder, HistoricalMaintenanceOrder, PlannedFrequencyCode, ExecutionStatusCode } from './types';
 import { 
   INITIAL_CLIENTS, 
   INITIAL_VEHICLES, 
@@ -14,7 +14,8 @@ import {
   INITIAL_MAINTENANCE_ORDERS,
   INITIAL_CALENDAR_EQUIPMENT,
   INITIAL_PREDICTIVE_RECORDS,
-  INITIAL_MAINTENANCE_REMINDERS
+  INITIAL_MAINTENANCE_REMINDERS,
+  INITIAL_HISTORICAL_ORDERS
 } from './mockData';
 
 export function useWorkshopState() {
@@ -30,6 +31,7 @@ export function useWorkshopState() {
   const [calendarEquipment, setCalendarEquipment] = useState<EquipmentCalendarRow[]>([]);
   const [predictiveRecords, setPredictiveRecords] = useState<PredictiveMaintenanceRecord[]>([]);
   const [reminders, setReminders] = useState<MaintenanceReminder[]>([]);
+  const [historicalOrders, setHistoricalOrders] = useState<HistoricalMaintenanceOrder[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [settings, setSettings] = useState<WorkshopSettings>(INITIAL_SETTINGS);
   const [loaded, setLoaded] = useState(false);
@@ -48,6 +50,7 @@ export function useWorkshopState() {
     const localCalendarEquipment = localStorage.getItem('wt_calendar_equipment');
     const localPredictiveRecords = localStorage.getItem('wt_predictive_records');
     const localReminders = localStorage.getItem('wt_reminders');
+    const localHistoricalOrders = localStorage.getItem('wt_historical_orders');
     const localTransactions = localStorage.getItem('wt_transactions');
     const localSettings = localStorage.getItem('wt_settings');
 
@@ -63,6 +66,7 @@ export function useWorkshopState() {
     setCalendarEquipment(localCalendarEquipment ? JSON.parse(localCalendarEquipment) : INITIAL_CALENDAR_EQUIPMENT);
     setPredictiveRecords(localPredictiveRecords ? JSON.parse(localPredictiveRecords) : INITIAL_PREDICTIVE_RECORDS);
     setReminders(localReminders ? JSON.parse(localReminders) : INITIAL_MAINTENANCE_REMINDERS);
+    setHistoricalOrders(localHistoricalOrders ? JSON.parse(localHistoricalOrders) : INITIAL_HISTORICAL_ORDERS);
     setTransactions(localTransactions ? JSON.parse(localTransactions) : INITIAL_TRANSACTIONS);
     let parsedSettings = localSettings ? JSON.parse(localSettings) : INITIAL_SETTINGS;
     if (parsedSettings && parsedSettings.address && (parsedSettings.address.includes('Palmas') || parsedSettings.address.includes('palmas'))) {
@@ -134,6 +138,11 @@ export function useWorkshopState() {
     if (!loaded) return;
     localStorage.setItem('wt_reminders', JSON.stringify(reminders));
   }, [reminders, loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem('wt_historical_orders', JSON.stringify(historicalOrders));
+  }, [historicalOrders, loaded]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -736,6 +745,24 @@ export function useWorkshopState() {
   };
 
 
+  // Historical Maintenance Orders Actions
+  const addHistoricalOrder = (order: Omit<HistoricalMaintenanceOrder, 'id'>) => {
+    const newRecord: HistoricalMaintenanceOrder = {
+      ...order,
+      id: `hist-${Date.now()}`
+    };
+    setHistoricalOrders(prev => [newRecord, ...prev]);
+    return newRecord;
+  };
+
+  const updateHistoricalOrder = (id: string, updated: Partial<HistoricalMaintenanceOrder>) => {
+    setHistoricalOrders(prev => prev.map(item => item.id === id ? { ...item, ...updated } : item));
+  };
+
+  const deleteHistoricalOrder = (id: string) => {
+    setHistoricalOrders(prev => prev.filter(item => item.id !== id));
+  };
+
   return {
     clients,
     vehicles,
@@ -749,6 +776,7 @@ export function useWorkshopState() {
     calendarEquipment,
     predictiveRecords,
     reminders,
+    historicalOrders,
     transactions,
     settings,
     setSettings,
@@ -792,6 +820,9 @@ export function useWorkshopState() {
     markReminderAttended,
     markReminderRead,
     deleteReminder,
+    addHistoricalOrder,
+    updateHistoricalOrder,
+    deleteHistoricalOrder,
     resetDatabase
 
   };

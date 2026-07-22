@@ -9,7 +9,7 @@ import {
   Shield, User, Wrench, Package, Car, Laptop, Clock, 
   Settings, CheckCircle2, ChevronRight, Menu, HelpCircle, AlertTriangle,
   Smartphone, Download, X, Home, LogOut, TrendingUp, BarChart2, DollarSign,
-  Users, Calendar, FileText, CheckSquare, FileCheck, BellRing, ClipboardList
+  Users, Calendar, FileText, CheckSquare, FileCheck, BellRing, ClipboardList, Layers
 } from 'lucide-react';
 import { useWorkshopState } from './useWorkshopState';
 import { UserRole } from './types';
@@ -78,6 +78,10 @@ export default function App() {
     markReminderAttended,
     markReminderRead,
     deleteReminder,
+    historicalOrders,
+    addHistoricalOrder,
+    updateHistoricalOrder,
+    deleteHistoricalOrder,
     resetDatabase
   } = useWorkshopState();
 
@@ -85,7 +89,7 @@ export default function App() {
   const [currentRole, setCurrentRole] = useState<UserRole>('admin');
 
   // Sub-modules tab states for synchronized bottom navigation
-  const [adminTab, setAdminTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config'>('calendario_predic');
+  const [adminTab, setAdminTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config'>('calendario_predic');
 
   const [advisorTab, setAdvisorTab] = useState<'reception' | 'quotes' | 'agenda' | 'crm'>('reception');
   const [mechanicTab, setMechanicTab] = useState<'tasks' | 'diagnostics' | 'requisitions'>('tasks');
@@ -147,6 +151,7 @@ export default function App() {
         return [
           { id: 'calendario_predic', label: 'Calendario', icon: Calendar, onClick: () => setAdminTab('calendario_predic'), isActive: adminTab === 'calendario_predic' },
           { id: 'recordatorios', label: 'Alertas', icon: BellRing, onClick: () => setAdminTab('recordatorios'), isActive: adminTab === 'recordatorios' },
+          { id: 'historial_ordenes', label: 'Historial', icon: Layers, onClick: () => setAdminTab('historial_ordenes'), isActive: adminTab === 'historial_ordenes' },
           { id: 'mantenimiento', label: 'Órdenes OT', icon: FileText, onClick: () => setAdminTab('mantenimiento'), isActive: adminTab === 'mantenimiento' },
           { id: 'personnel', label: 'Personal', icon: Users, onClick: () => setAdminTab('personnel'), isActive: adminTab === 'personnel' },
           { id: 'config', label: 'Ajustes', icon: Settings, onClick: () => setAdminTab('config'), isActive: adminTab === 'config' },
@@ -439,6 +444,10 @@ export default function App() {
                     markReminderAttended={markReminderAttended}
                     markReminderRead={markReminderRead}
                     deleteReminder={deleteReminder}
+                    historicalOrders={historicalOrders}
+                    addHistoricalOrder={addHistoricalOrder}
+                    updateHistoricalOrder={updateHistoricalOrder}
+                    deleteHistoricalOrder={deleteHistoricalOrder}
                     transactions={transactions}
                     purchaseOrders={purchaseOrders}
                     settings={settings}

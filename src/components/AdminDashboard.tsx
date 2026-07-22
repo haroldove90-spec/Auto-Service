@@ -7,11 +7,12 @@ import {
 import { 
   Client, Vehicle, Employee, InventoryItem, Supplier, ServiceOrder, Transaction, 
   WorkshopSettings, PurchaseOrder, MaintenanceOrder, EquipmentCalendarRow, 
-  PredictiveMaintenanceRecord, MaintenanceReminder, PlannedFrequencyCode, ExecutionStatusCode 
+  PredictiveMaintenanceRecord, MaintenanceReminder, HistoricalMaintenanceOrder, PlannedFrequencyCode, ExecutionStatusCode 
 } from '../types';
 import MaintenanceOrdersModule from './MaintenanceOrdersModule';
 import PredictiveCalendarModule from './PredictiveCalendarModule';
 import RemindersModule from './RemindersModule';
+import { HistoricalOrdersModule } from './HistoricalOrdersModule';
 
 interface AdminDashboardProps {
   clients: Client[];
@@ -45,6 +46,12 @@ interface AdminDashboardProps {
   markReminderRead?: (id: string) => void;
   deleteReminder?: (id: string) => void;
 
+  // Historical Orders props
+  historicalOrders?: HistoricalMaintenanceOrder[];
+  addHistoricalOrder?: (order: Omit<HistoricalMaintenanceOrder, 'id'>) => void;
+  updateHistoricalOrder?: (id: string, updated: Partial<HistoricalMaintenanceOrder>) => void;
+  deleteHistoricalOrder?: (id: string) => void;
+
   transactions: Transaction[];
   purchaseOrders: PurchaseOrder[];
   settings: WorkshopSettings;
@@ -54,8 +61,8 @@ interface AdminDashboardProps {
   addTransaction: (t: Omit<Transaction, 'id' | 'date'>) => void;
   handleClientCreditPayment: (clientId: string, amount: number, method: 'Efectivo' | 'Tarjeta' | 'Transferencia') => void;
   resetDatabase: () => void;
-  activeTab?: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config';
-  setActiveTab?: (tab: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config') => void;
+  activeTab?: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config';
+  setActiveTab?: (tab: 'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config') => void;
 }
 
 export default function AdminDashboard({
@@ -82,6 +89,10 @@ export default function AdminDashboard({
   markReminderAttended = () => {},
   markReminderRead = () => {},
   deleteReminder = () => {},
+  historicalOrders = [],
+  addHistoricalOrder = () => {},
+  updateHistoricalOrder = () => {},
+  deleteHistoricalOrder = () => {},
   transactions,
   purchaseOrders,
   settings,
@@ -94,7 +105,7 @@ export default function AdminDashboard({
   activeTab: propActiveTab,
   setActiveTab: propSetActiveTab
 }: AdminDashboardProps) {
-  const [localTab, setLocalTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'personnel' | 'config'>('calendario_predic');
+  const [localTab, setLocalTab] = useState<'mantenimiento' | 'calendario_predic' | 'recordatorios' | 'historial_ordenes' | 'personnel' | 'config'>('calendario_predic');
   const activeTab = propActiveTab || localTab;
   const setActiveTab = propSetActiveTab || setLocalTab;
 
@@ -293,6 +304,7 @@ export default function AdminDashboard({
           >
             <option value="calendario_predic">📅 Calendario de Mantenimiento Predictivo (Mensual & Anual)</option>
             <option value="recordatorios">🔔 Recordatorios y Alertas</option>
+            <option value="historial_ordenes">📊 Historial Órdenes de Mantenimiento (Archivo 2025/2026)</option>
             <option value="mantenimiento">📋 Órdenes de Trabajo MT0301F1</option>
             <option value="personnel">👥 Personal u Operarios</option>
             <option value="config">⚙️ Configuración Maestra</option>
@@ -341,6 +353,18 @@ export default function AdminDashboard({
           >
             <FileText size={16} />
             Órdenes de Trabajo MT0301F1
+          </button>
+          <button
+            id="tab-historial-ordenes"
+            onClick={() => setActiveTab('historial_ordenes')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+              activeTab === 'historial_ordenes'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-2 ring-emerald-500/30'
+                : 'text-slate-700 bg-white border border-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            <Layers size={16} />
+            Historial Órdenes Mantenimiento
           </button>
           <button
             id="tab-personnel"
@@ -420,6 +444,16 @@ export default function AdminDashboard({
           addMaintenanceOrder={addMaintenanceOrder}
           updateMaintenanceOrder={updateMaintenanceOrder}
           deleteMaintenanceOrder={deleteMaintenanceOrder}
+        />
+      )}
+
+      {/* HISTORICAL MAINTENANCE ORDERS TAB */}
+      {activeTab === 'historial_ordenes' && (
+        <HistoricalOrdersModule
+          historicalOrders={historicalOrders}
+          addHistoricalOrder={addHistoricalOrder}
+          updateHistoricalOrder={updateHistoricalOrder}
+          deleteHistoricalOrder={deleteHistoricalOrder}
         />
       )}
 
