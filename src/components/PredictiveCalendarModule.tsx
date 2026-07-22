@@ -572,28 +572,28 @@ export default function PredictiveCalendarModule({
           </div>
 
           {/* NOTES FOOTER SECTION MATCHING IMAGE */}
-          <div className="p-5 bg-amber-100/90 border border-amber-300 rounded-2xl text-xs space-y-3 text-slate-950 shadow-sm">
-            <div className="font-black text-amber-950 text-sm flex items-center gap-2 border-b border-amber-200/80 pb-2">
-              <Info size={18} className="text-amber-800" />
-              NOTAS Y REGLAS OPERATIVAS DEL CALENDARIO:
+          <div className="p-5 bg-slate-900 border border-slate-700/80 rounded-2xl text-xs space-y-3 text-white shadow-xl">
+            <div className="font-black text-amber-400 text-sm flex items-center gap-2 border-b border-slate-700 pb-2.5 tracking-wide">
+              <Info size={18} className="text-amber-400 shrink-0" />
+              <span>NOTAS Y REGLAS OPERATIVAS DEL CALENDARIO:</span>
             </div>
-            <ol className="list-decimal list-inside space-y-2 font-semibold text-slate-900 leading-relaxed">
-              <li>
-                <strong className="text-slate-950 font-extrabold">Para los mantenimientos preventivos con frecuencia MENSUAL:</strong> la semana es solamente referencia ya que se realiza conforme a disponibilidad del equipo siempre y cuando se realice dentro del mismo mes.
+            <ol className="list-decimal list-inside space-y-2.5 font-normal text-slate-200 leading-relaxed">
+              <li className="marker:text-amber-400 marker:font-bold">
+                <strong className="text-amber-300 font-extrabold">Para los mantenimientos preventivos con frecuencia MENSUAL:</strong> <span className="text-white">la semana es solamente referencia ya que se realiza conforme a disponibilidad del equipo siempre y cuando se realice dentro del mismo mes.</span>
               </li>
-              <li>
-                <strong className="text-slate-950 font-extrabold">Para los mantenimientos preventivos con frecuencia BIMESTRAL:</strong> se valida con producción para que se pueda realizar conforme a la disponibilidad del equipo siempre y cuando se realice dentro del mismo tiempo de los 2 meses.
+              <li className="marker:text-amber-400 marker:font-bold">
+                <strong className="text-amber-300 font-extrabold">Para los mantenimientos preventivos con frecuencia BIMESTRAL:</strong> <span className="text-white">se valida con producción para que se pueda realizar conforme a la disponibilidad del equipo siempre y cuando se realice dentro del mismo tiempo de los 2 meses.</span>
               </li>
-              <li>
-                <strong className="text-slate-950 font-extrabold">Los mantenimientos preventivos con frecuencia ANUAL:</strong> son planeados a realizarse en la última semana del año aunque pudiera realizarse antes de acuerdo a disponibilidad, siempre y cuando la frecuencia no exceda 12 meses.
+              <li className="marker:text-amber-400 marker:font-bold">
+                <strong className="text-amber-300 font-extrabold">Los mantenimientos preventivos con frecuencia ANUAL:</strong> <span className="text-white">son planeados a realizarse en la última semana del año aunque pudiera realizarse antes de acuerdo a disponibilidad, siempre y cuando la frecuencia no exceda 12 meses.</span>
               </li>
-              <li>
-                <strong className="text-slate-950 font-extrabold">Los mantenimientos preventivos a los troqueles y herramientas de doblez:</strong> se realiza de forma MENSUAL, en caso de que no se hayan utilizado durante el mes solamente se realiza limpieza.
+              <li className="marker:text-amber-400 marker:font-bold">
+                <strong className="text-amber-300 font-extrabold">Los mantenimientos preventivos a los troqueles y herramientas de doblez:</strong> <span className="text-white">se realiza de forma MENSUAL, en caso de que no se hayan utilizado durante el mes solamente se realiza limpieza.</span>
               </li>
             </ol>
-            <div className="pt-2 text-[11px] text-slate-700 font-bold flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-amber-300/80 mt-2 gap-1">
-              <span>Last Update: 3-Sept-2025 • Updated by: Alejandro Castellanos</span>
-              <span>Documento Oficial T+H Automotive • Versión 2026</span>
+            <div className="pt-2.5 text-[11px] text-slate-400 font-medium flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-slate-800 mt-2 gap-1.5">
+              <span className="text-slate-300 font-mono">Last Update: 3-Sept-2025 • Updated by: Alejandro Castellanos</span>
+              <span className="text-amber-400 font-semibold">Documento Oficial T+H Automotive • Versión 2026</span>
             </div>
           </div>
         </div>
