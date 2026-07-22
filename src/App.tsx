@@ -308,50 +308,40 @@ export default function App() {
                 referrerPolicy="no-referrer"
               />
 
-              {/* Grid of access icons with name (Admin active, others disabled) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 w-full max-w-5xl">
+              {/* Access Card for Admin Role */}
+              <div className="flex justify-center w-full max-w-md">
                 {[
                   { id: 'admin', name: 'Gerente: Alejandro Castellanos', icon: Shield, enabled: true },
-                  { id: 'advisor', name: 'Asesor / Recepción', icon: User, enabled: false },
-                  { id: 'mechanic', name: 'Técnico de Mantenimiento (7 Operarios)', icon: Wrench, enabled: false },
-                  { id: 'warehouse', name: 'Almacenista / Auxiliar de Control', icon: Package, enabled: false },
-                  { id: 'client', name: 'Portal del Cliente', icon: Car, enabled: false }
                 ].map((roleItem) => {
                   const IconComponent = roleItem.icon;
                   const isEnabled = roleItem.enabled;
                   return (
                     <motion.button
                       key={roleItem.id}
-                      whileHover={isEnabled ? { scale: 1.05 } : {}}
-                      whileTap={isEnabled ? { scale: 0.95 } : {}}
-                      disabled={!isEnabled}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => {
-                        if (isEnabled) {
-                          setCurrentRole(roleItem.id as UserRole);
-                          setShowLanding(false);
-                        }
+                        setCurrentRole(roleItem.id as UserRole);
+                        setShowLanding(false);
                       }}
-                      className={`role-card relative flex flex-col items-center justify-between p-4 sm:p-5 rounded-2xl border transition-all aspect-square text-center shadow-sm ${
-                        isEnabled 
-                          ? 'bg-white border-[#FA5210] ring-2 ring-[#FA5210]/20 shadow-md cursor-pointer hover:shadow-lg' 
-                          : 'bg-slate-50/80 border-slate-200 opacity-60 cursor-not-allowed'
-                      }`}
+                      className="role-card relative w-full flex flex-col items-center justify-between p-6 sm:p-8 rounded-2xl border border-[#FA5210] ring-2 ring-[#FA5210]/20 bg-white shadow-xl cursor-pointer hover:shadow-2xl transition-all text-center group"
                     >
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                        isEnabled ? 'bg-[#FA5210] text-white' : 'bg-slate-200 text-slate-500'
-                      }`}>
-                        {isEnabled ? 'Activo' : 'Desactivado'}
+                      <span className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider bg-[#FA5210] text-white shadow-sm">
+                        Acceso Principal • Administrador
                       </span>
 
-                      <div className={`p-3 sm:p-4 rounded-full my-1 border flex items-center justify-center ${
-                        isEnabled ? 'bg-[#FA5210]/10 text-[#FA5210] border-[#FA5210]/20' : 'bg-slate-200/50 text-slate-400 border-slate-300/50'
-                      }`}>
-                        <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 stroke-[1.8]" />
+                      <div className="p-5 rounded-2xl my-4 border bg-[#FA5210]/10 text-[#FA5210] border-[#FA5210]/30 group-hover:bg-[#FA5210] group-hover:text-white transition-all">
+                        <IconComponent className="w-10 h-10 sm:w-12 sm:h-12 stroke-[1.8]" />
                       </div>
 
-                      <span className={`font-bold text-xs sm:text-sm tracking-tight ${isEnabled ? 'text-slate-900' : 'text-slate-500'}`}>
-                        {roleItem.name}
-                      </span>
+                      <div>
+                        <span className="font-black text-base sm:text-lg text-slate-900 block tracking-tight">
+                          {roleItem.name}
+                        </span>
+                        <p className="text-xs text-slate-500 font-medium mt-1">
+                          Ingresar al Tablero de Control de Mantenimiento
+                        </p>
+                      </div>
                     </motion.button>
                   );
                 })}
